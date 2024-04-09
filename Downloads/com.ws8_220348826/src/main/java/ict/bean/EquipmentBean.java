@@ -15,6 +15,15 @@ public class EquipmentBean implements Serializable{
     private String EName;
     private String Estatus;
     private int quantity;
+    private int wid;
+
+    public void setWid(int wid) {
+        this.wid = wid;
+    }
+
+    public int getWid() {
+        return wid;
+    }
 
     public EquipmentBean() {
     }

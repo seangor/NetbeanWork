@@ -4,6 +4,8 @@
     Author     : sean3
 --%>
 
+<%@page import="ict.bean.EquipmentBean"%>
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -11,17 +13,18 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
-    <body>1
+    <body>
+
         <a href="/com.ws8_220348826/HandleEquipment?action=list">View Equipment</a>
         <a href="FUNCTION/addRecord.jsp">Borrow Equipment</a>
         <a href="FUNCTION/SearchEquipment.jsp">Search Equipment</a>
         <a href="/com.ws8_220348826/HandleBorrowRecord?action=list">ViewRecord</a>
         <a href="FUNCTION/ReturnEquipment.jsp">Return Equipment</a>
+                <a href="/com.ws8_220348826/HandleWishlist?action=notice">Notification</a>
 
-        <a href="Updaterecord.jsp">UpdateRecord</a>
-        <a href="ReserveEq.jsp">ReserveEq</a>
-        <a href="CheckOutEq.jsp">CheckOutEq</a>
-        <a href="ReturnEq.jsp">ReturnEq</a>
+<br />
+
+
 
     </body>
 </html>

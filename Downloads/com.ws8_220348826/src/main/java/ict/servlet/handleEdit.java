@@ -72,8 +72,13 @@ public class handleEdit extends HttpServlet {
             } else {
             PrintWriter out = response.getWriter();
             out.println("This Equipment is not available!");
-            }
-        }  else {
+            } 
+        } if  ("return".equalsIgnoreCase(action)) {
+            int bid = Integer.parseInt(request.getParameter("bid"));
+            db.UpdateReturnStatus(bid);
+            response.sendRedirect("/com.ws8_220348826/USERS/User.jsp");
+
+        }else {
             PrintWriter out = response.getWriter();
             out.println("No such action!!!");
         }

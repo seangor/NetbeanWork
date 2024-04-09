@@ -14,10 +14,34 @@
     </head>
     <body>
         <%
-            ArrayList<EquipmentBean>equipments = (ArrayList<EquipmentBean>) request.getAttribute("Equipments");
+            ArrayList<EquipmentBean> eqs = (ArrayList<EquipmentBean>) request.getAttribute("Equipments");
+            out.println("<h1>查看裝置狀態</h1>");
+            out.println("<table border='1' >");
+            out.println("<tr>");
+            out.println("<th>ID</th><th>名字</th><th>狀態</th><th>數量</th><th>加入願望清單</th>");
+            out.println("</tr>");
+            for (int i = 0; i < eqs.size(); i++) {
+                EquipmentBean c = eqs.get(i);
+                out.println("<tr>");
+                out.println("<td>" + c.getEid() + "</td>");
+                out.println("<td>" + c.getEName() + "</td>");
+                out.println("<td>" + c.getEstatus() + "</td>");
+                out.println("<td>" + c.getQuantity() + "</td>");
+                out.println("<td style=\"text-align: center; \"><a href=\"HandleWishlist?action=add&eid=" + c.getEid() + "&wid="+c.getWid()+"\" >");
+                if (c.getWid() != 0) {
+                    out.println("<img src=\"img/heart.png\" style=\"width: 20px; height: 20px; padding-top: 3px; \" />");
 
+                } else {
+                    out.println("<img src=\"img/like.png\" style=\"width: 20px; height: 20px; alignContent: center; padding-top: 3px; \" />");
 
+                }
+                out.println("</a></td>");
+                out.println("</tr>");
+            }
+            out.println("</table>");
         %>   
-        <ict:showEquipment list="<%=equipments%>" type="equipment" />
+        <a href="USERS/FUNCTION/addRecord.jsp">Back to user</a>
+        <img src="img/like.png" style="width: 20px; height: 20px" />
+
     </body>
 </html>

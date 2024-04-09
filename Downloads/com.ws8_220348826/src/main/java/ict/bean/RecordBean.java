@@ -17,6 +17,15 @@ public class RecordBean implements Serializable {
     private String Ename;
     private String borrowDate;
     private String Deadline;
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public int getBid() {
         return bid;

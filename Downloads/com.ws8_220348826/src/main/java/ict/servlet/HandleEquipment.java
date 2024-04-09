@@ -75,5 +75,7 @@ public class HandleEquipment extends HttpServlet {
         }
     }
     }
+    
+
 
 }

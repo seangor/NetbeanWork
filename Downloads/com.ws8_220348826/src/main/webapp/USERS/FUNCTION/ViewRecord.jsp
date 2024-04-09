@@ -20,5 +20,7 @@
 
         %>   
         <ict:showEquipment list="<%=Record%>" type="BRecord" />
+        <a href="USERS/User.jsp">Back to user</a>
+
     </body>
 </html>

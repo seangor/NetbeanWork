@@ -13,13 +13,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class EquipmentDB {
+/**
+ *
+ * @author sean3
+ */
+public class WishlistDB {
 
     private String url = "";
     private String username = "";
     private String password = "";
 
-    public EquipmentDB(String url, String username, String password) {
+    public WishlistDB(String url, String username, String password) {
         this.url = url;
         this.username = username;
         this.password = password;
@@ -35,20 +39,17 @@ public class EquipmentDB {
         return DriverManager.getConnection(url, username, password);
     }
 
-    public ArrayList queryEq() {
+        public ArrayList queryNotice() {
         Connection cnnct = null;
         PreparedStatement pStmnt = null;
         try {
             cnnct = getConnection();
-            String query = "SELECT e.Eid, e.EName, e.EStatus, e.Quantity, w.wid "
-                    + "FROM Equipment e "
-                    + "LEFT JOIN Wishlist w ON w.eid = e.Eid";
+            String query = "SELECT * FROM Equipment e, wishlist w WHERE e.Eid = w.eid AND EStatus = \"Available\"";
             pStmnt = cnnct.prepareStatement(query);
             //Statement s = cnnct.createStatement();
             ResultSet rs = pStmnt.executeQuery();
 
             ArrayList list = new ArrayList();
-
             while (rs.next()) {
                 EquipmentBean eb = new EquipmentBean();
                 eb.setEid(rs.getInt(1));
@@ -77,25 +78,23 @@ public class EquipmentDB {
         return null;
     }
 
-    public EquipmentBean queryEqById(int eid) {
+
+    public boolean delWishlist(int wid) {
         Connection cnnct = null;
         PreparedStatement pStmnt = null;
+        boolean isSuccess = false;
         try {
             cnnct = getConnection();
-            String preQueryStatement = "SELECT Eid, EName, EStatus, Quantity FROM Equipment WHERE eid = ?";
+            String preQueryStatement = "DELETE FROM Wishlist WHERE wid = ?";
             pStmnt = cnnct.prepareStatement(preQueryStatement);
-            pStmnt.setInt(1, eid);
-            ResultSet rs = pStmnt.executeQuery();
-            EquipmentBean eb = new EquipmentBean();
+            pStmnt.setInt(1, wid);
+            int rowCount = pStmnt.executeUpdate();
 
-            while (rs.next()) {
-                eb.setEid(rs.getInt(1));
-                eb.setEName(rs.getString(2));
-                eb.setEstatus(rs.getString(3));
-                eb.setQuantity(rs.getInt(4));
+            if (rowCount > 0) {
+                isSuccess = true;
             }
-
-            return eb;
+            pStmnt.close();
+            cnnct.close();
         } catch (SQLException ex) {
             while (ex != null) {
                 ex.printStackTrace();
@@ -111,58 +110,22 @@ public class EquipmentDB {
                 }
             }
         }
-        return null;
+        return isSuccess;
     }
-
-    public ArrayList<EquipmentBean> queryEqByName(String name) {
+    
+        public boolean addWishlist(int uid, int eid) {
         Connection cnnct = null;
         PreparedStatement pStmnt = null;
         boolean isSuccess = false;
-        ArrayList<EquipmentBean> eList = new ArrayList<EquipmentBean>();
-
         try {
             cnnct = getConnection();
-            String preStatement = "SELECT Eid, EName, EStatus, Quantity FROM Equipment WHERE EName LIKE ?";
-            pStmnt = cnnct.prepareStatement(preStatement);
-            pStmnt.setString(1, "%" + name + "%");
-            ResultSet rs = pStmnt.executeQuery();
-            while (rs.next()) {
-                EquipmentBean eb = new EquipmentBean();
-                eb.setEid(rs.getInt(1));
-                eb.setEName(rs.getString(2));
-                eb.setEstatus(rs.getString(3));
-                eb.setQuantity(rs.getInt(4));
-                eList.add(eb);
-            }
-            pStmnt.close();
-            cnnct.close();
-            return eList;
-        } catch (SQLException ex) {
-            while (ex != null) {
-                ex.printStackTrace();
-                ex = ex.getNextException();
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return eList;
-    }
-
-    public boolean borrowEquipment(int count, int eid) {
-        Connection cnnct = null;
-        PreparedStatement pStmnt = null;
-        boolean isSuccess = false;
-        count -= 1;
-        if (count < 0) {
-            return false;
-        }
-        try {
-            cnnct = getConnection();
-            String preQueryStatement = "UPDATE Equipment SET Quantity = ? WHERE eid = ?";
+            String preQueryStatement = "INSERT INTO wishlist (eid, uid) VALUES (?, ?)";
             pStmnt = cnnct.prepareStatement(preQueryStatement);
-            pStmnt.setInt(1, count);
-            pStmnt.setInt(2, eid);
+            pStmnt.setInt(1, eid);
+            pStmnt.setInt(2, uid);
+
             int rowCount = pStmnt.executeUpdate();
+
             if (rowCount > 0) {
                 isSuccess = true;
             }
@@ -175,36 +138,16 @@ public class EquipmentDB {
             }
         } catch (IOException ex) {
             ex.printStackTrace();
+        } finally {
+            if (cnnct != null) {
+                try {
+                    cnnct.close();
+                } catch (SQLException sqlEx) {
+                }
+            }
         }
-
         return isSuccess;
     }
-
-    public void checkStatus(int count, int eid) {
-        Connection cnnct = null;
-        PreparedStatement pStmnt = null;
-        try {
-
-            cnnct = getConnection();
-            String preQueryStatement = "";
-            if (count == 0) {
-                preQueryStatement = "UPDATE Equipment SET status = Unavailable WHERE eid = ?";
-            } else if (count > 0) {
-                preQueryStatement = "UPDATE Equipment SET status = Available WHERE eid = ?";
-            }
-            pStmnt = cnnct.prepareStatement(preQueryStatement);
-            int rowCount = pStmnt.executeUpdate();
-
-            pStmnt.close();
-            cnnct.close();
-        } catch (SQLException ex) {
-            while (ex != null) {
-                ex.printStackTrace();
-                ex = ex.getNextException();
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
+        
+        
 }

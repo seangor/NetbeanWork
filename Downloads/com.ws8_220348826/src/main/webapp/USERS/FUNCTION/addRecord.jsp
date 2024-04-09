@@ -12,18 +12,29 @@
         <title>JSP Page</title>
     </head>
     <body>
-            <h1>Add Record</h1>
-                    <form  method=“get" action="handleEdit">
+        <h1>加入預訂</h1>
+        <form  method=“get" action="handleEdit">
             <table>
                 <tr>
                     <td>
                         <input type="hidden" name="action"  value="add" />
                     </td></tr><tr><td>
-                        Equipment ID  <input name="eid"  type="text" value="" /> 
+                        裝備 ID：  <input name="eid"  type="text" value="" /> 
+                    </td></tr>
+                <tr><td>
+                        裝備名字：  <input name="eid"  type="text" value="" /> 
+                    </td></tr>
+                <tr><td>
+                        取件日期 & 時間：  <input name="eid"  type="text" value="" /> 
                     </td></tr><tr><td>
+                        取件方法：  <input name="eid"  type="radio" value=<"" /> 快遞  / <input name="eid"  type="radio" value=<"" /> 自取
+                    </td></tr>
+                <tr><td>
                         <input type="submit" value="submit"/> <br></td>
                 </tr>
             </table>
         </form>
-                </body>
+        <a href="USERS/User.jsp">Back to user</a>
+
+    </body>
 </html>

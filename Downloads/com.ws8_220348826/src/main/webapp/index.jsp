@@ -12,5 +12,9 @@
         <a href="ADMIN/Admin.jsp">Admin</a>
         <a href="TECHNICIAN/Technician.jsp">Admin</a>
         <a href="COURIER/Courier.jsp">Courier</a>
+        <a><img src="img/heart.png" style="width: 20px; height: 20px" />
+            <a href="HandleWishlist">
+        <img src="img/like.png" style="width: 20px; height: 20px" />
+</a>
     </body>
 </html>

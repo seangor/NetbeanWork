@@ -5,9 +5,7 @@
 package ict.servlet;
 
 import ict.bean.EquipmentBean;
-import ict.bean.RecordBean;
-import ict.db.EquipmentDB;
-import ict.db.UserRecord;
+import ict.db.WishlistDB;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -22,11 +20,10 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author sean3
  */
-@WebServlet(name = "HandleBorrowRecord", urlPatterns = {"/HandleBorrowRecord"})
-public class HandleBorrowRecord extends HttpServlet {
+@WebServlet(name = "HandleWishlist", urlPatterns = {"/HandleWishlist"})
+public class HandleWishlist extends HttpServlet {
 
-    private UserRecord Udb;
-    private EquipmentDB Edb;
+    private WishlistDB WishDB;
 
     @Override
     public void init() {
@@ -34,7 +31,7 @@ public class HandleBorrowRecord extends HttpServlet {
         String dbPassword = this.getServletContext().getInitParameter("dbPassword");
         String dbUrl = this.getServletContext().getInitParameter("dbUrl");
 
-        Udb = new UserRecord(dbUrl, dbUser, dbPassword);
+        WishDB = new WishlistDB(dbUrl, dbUser, dbPassword);
 
     }
 
@@ -55,22 +52,25 @@ public class HandleBorrowRecord extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
         String action = request.getParameter("action");
-        if ("list".equalsIgnoreCase(action)) {
-            ArrayList<RecordBean> rbs = Udb.queryBRec();
-            request.setAttribute("BRecord", rbs);
+        if ("add".equalsIgnoreCase(action)) {
+            int eid = Integer.parseInt(request.getParameter("eid"));
+            int wid = Integer.parseInt(request.getParameter("wid"));
+
+            if (wid == 0) {
+                WishDB.addWishlist(1, eid);
+            } else {
+                WishDB.delWishlist(wid);
+            }
+            response.sendRedirect("/com.ws8_220348826/HandleEquipment?action=list");
+        } else if ("notice".equalsIgnoreCase(action)) {
+            ArrayList<EquipmentBean> eq = WishDB.queryNotice();
+            request.setAttribute("notification",eq);
             RequestDispatcher rd;
-            rd = getServletContext().getRequestDispatcher("/USERS/FUNCTION/ViewRecord.jsp");
-            rd.forward(request, response);
-        } else if ("cList".equalsIgnoreCase(action)) {
-            ArrayList<RecordBean> rbs = Udb.queryBRec();
-            request.setAttribute("BRecord", rbs);
-            RequestDispatcher rd;
-            rd = getServletContext().getRequestDispatcher("/COURIER/FUNCTION/ViewPending.jsp");
+            rd = getServletContext().getRequestDispatcher("/USERS/FUNCTION/ViewNotification.jsp");
             rd.forward(request, response);
         }
-
+            
     }
 
 }

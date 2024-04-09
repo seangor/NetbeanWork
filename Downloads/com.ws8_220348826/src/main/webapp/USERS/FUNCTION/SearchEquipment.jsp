@@ -12,12 +12,14 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Search Equipment</h1>
+        <h1>搜查裝備</h1>
         <form method="get" action="/com.ws8_220348826/HandleEquipment" >
             <input type="hidden" name="action" value="search"/>
-            <label>Equipment Name: </label>
+            <label>裝備名稱: </label>
             <input type="text" name="equipments" />
             <input type="submit" value="search" />
         </form>
+        <a href="USERS/User.jsp">Back to user</a>
+
     </body>
 </html>

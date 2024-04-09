@@ -12,6 +12,8 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Courier</h1>
+        <a href="/com.ws8_220348826/HandleBorrowRecord?action=cList">View Pending</a>
+                <a href="/com.ws8_220348826/HandleBorrowRecord?action=cList">Update Finish Statuss</a>
+
     </body>
 </html>
