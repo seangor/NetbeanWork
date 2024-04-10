@@ -64,10 +64,22 @@ public class HandleBorrowRecord extends HttpServlet {
             rd = getServletContext().getRequestDispatcher("/USERS/FUNCTION/ViewRecord.jsp");
             rd.forward(request, response);
         } else if ("cList".equalsIgnoreCase(action)) {
-            ArrayList<RecordBean> rbs = Udb.queryBRec();
+            ArrayList<RecordBean> rbs = Udb.queryBRec_Courier();
             request.setAttribute("BRecord", rbs);
             RequestDispatcher rd;
             rd = getServletContext().getRequestDispatcher("/COURIER/FUNCTION/ViewPending.jsp");
+            rd.forward(request, response);
+        } else if ("cList".equalsIgnoreCase(action)) {
+            ArrayList<RecordBean> rbs = Udb.queryBRec_Courier();
+            request.setAttribute("BRecord", rbs);
+            RequestDispatcher rd;
+            rd = getServletContext().getRequestDispatcher("/COURIER/FUNCTION/ViewPending.jsp");
+            rd.forward(request, response);
+        } else if ("OrderList".equalsIgnoreCase(action)) {
+            ArrayList<RecordBean> rbs = Udb.queryBRec_CourierOrder();
+            request.setAttribute("BRecord", rbs);
+            RequestDispatcher rd;
+            rd = getServletContext().getRequestDispatcher("/COURIER/FUNCTION/ViewOrder.jsp");
             rd.forward(request, response);
         }
 

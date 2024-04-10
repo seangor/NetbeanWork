@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author sean3
  */
-@WebServlet(name = "handleEdit", urlPatterns = {"/USERS/FUNCTION/handleEdit"})
+@WebServlet(name = "handleEdit", urlPatterns = {"/handleEdit"})
 public class handleEdit extends HttpServlet {
 
     private UserRecord db;
@@ -73,12 +73,23 @@ public class handleEdit extends HttpServlet {
             PrintWriter out = response.getWriter();
             out.println("This Equipment is not available!");
             } 
-        } if  ("return".equalsIgnoreCase(action)) {
+        } else if  ("return".equalsIgnoreCase(action)) {
             int bid = Integer.parseInt(request.getParameter("bid"));
             db.UpdateReturnStatus(bid);
             response.sendRedirect("/com.ws8_220348826/USERS/User.jsp");
 
-        }else {
+        }else if  ("takeorder".equalsIgnoreCase(action)) {
+            int bid = Integer.parseInt(request.getParameter("bid"));
+            db.UpdateTakeOrderStatus(bid);
+            response.sendRedirect(""+request.getContextPath()+"/HandleBorrowRecord?action=cList");
+
+        }else if  ("finishOrder".equalsIgnoreCase(action)) {
+            int bid = Integer.parseInt(request.getParameter("bid"));
+            db.UpdateFinishStatus(bid);
+            response.sendRedirect(""+request.getContextPath()+"/HandleBorrowRecord?action=OrderList");
+
+        }
+        else {
             PrintWriter out = response.getWriter();
             out.println("No such action!!!");
         }

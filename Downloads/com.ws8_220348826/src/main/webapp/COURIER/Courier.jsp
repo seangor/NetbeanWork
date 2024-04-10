@@ -12,8 +12,8 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <a href="/com.ws8_220348826/HandleBorrowRecord?action=cList">View Pending</a>
-                <a href="/com.ws8_220348826/HandleBorrowRecord?action=cList">Update Finish Statuss</a>
+        <a href="<%=request.getContextPath() %>/HandleBorrowRecord?action=cList">View Pending</a>
+                <a href="<%=request.getContextPath() %>/HandleBorrowRecord?action=OrderList">View Order</a>
 
     </body>
 </html>
