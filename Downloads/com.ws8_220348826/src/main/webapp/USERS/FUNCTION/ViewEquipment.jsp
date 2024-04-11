@@ -20,7 +20,7 @@
                 font-family: 'Arial', sans-serif;
                 background-color: #f4f4f4;
                 margin: 0;
-                
+
             }
             h1 {
                 color: #333;
@@ -134,18 +134,23 @@
 
             <!-- Page Content  -->
             <div id="content" class="p-4 p-md-5 pt-5">
-                
+
                 <%
                     ArrayList<EquipmentBean> eqs = (ArrayList<EquipmentBean>) request.getAttribute("Equipments");
+                    if (session.getAttribute("equipments") == null) {
+                        session.setAttribute("equipments", new ArrayList<EquipmentBean>());
+                    }
                     out.println("<h1>查看裝置狀態</h1>");
+                    out.println("<a href=\"" + request.getContextPath() + "/USERS/FUNCTION/ViewCart.jsp\">查看預訂列表</a>");
                     out.println("<table border='1' >");
                     out.println("<tr>");
-                    out.println("<th>ID</th><th>名字</th><th>狀態</th><th>數量</th><th>加入願望清單</th>");
+                    out.println("<th>ID</th><th>圖片</th><th>名字</th><th>狀態</th><th>數量</th><th>加入願望清單</th><th>加入預訂</th>");
                     out.println("</tr>");
                     for (int i = 0; i < eqs.size(); i++) {
                         EquipmentBean c = eqs.get(i);
                         out.println("<tr>");
                         out.println("<td>" + c.getEid() + "</td>");
+                        out.println("<td><img width=108px height=80px src=\"img/" + c.getImgsrc() + "\"/></td>");
                         out.println("<td>" + c.getEName() + "</td>");
                         out.println("<td>" + c.getEstatus() + "</td>");
                         out.println("<td>" + c.getQuantity() + "</td>");
@@ -158,6 +163,12 @@
 
                         }
                         out.println("</a></td>");
+                        out.println("<td><form action=handleEdit method=get >"
+                        + "<input type=hidden name=action value=addCart />"
+                        + "<input type=hidden name=eid value="+c.getEid()+" />"
+                        + "<input type=submit value=預訂 />"
+                        + "</form></td>");
+
                         out.println("</tr>");
                     }
                     out.println("</table>");

@@ -16,6 +16,15 @@ public class EquipmentBean implements Serializable{
     private String Estatus;
     private int quantity;
     private int wid;
+    private String imgsrc;
+
+    public String getImgsrc() {
+        return imgsrc;
+    }
+
+    public void setImgsrc(String imgsrc) {
+        this.imgsrc = imgsrc;
+    }
 
     public void setWid(int wid) {
         this.wid = wid;

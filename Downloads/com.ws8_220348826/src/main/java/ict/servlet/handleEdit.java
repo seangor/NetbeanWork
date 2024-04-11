@@ -4,7 +4,6 @@
  */
 package ict.servlet;
 
-
 import ict.bean.EquipmentBean;
 import ict.db.EquipmentDB;
 import ict.db.UserRecord;
@@ -17,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -27,6 +27,7 @@ public class handleEdit extends HttpServlet {
 
     private UserRecord db;
     private EquipmentDB Eqdb;
+
     @Override
     public void init() {
         String dbUser = this.getServletContext().getInitParameter("dbUser");
@@ -63,33 +64,38 @@ public class handleEdit extends HttpServlet {
             EquipmentBean eq = Eqdb.queryEqById(eid);
             int count = eq.getQuantity();
             if (count > 0) {
-            Eqdb.borrowEquipment(count, eid);
-            Eqdb.checkStatus(count, eid);
-            boolean isSuccess = db.addBRecord(1, eid);
-            if (isSuccess) {
-            response.sendRedirect("/com.ws8_220348826/HandleEquipment?action=list");
-            }
+                Eqdb.borrowEquipment(count, eid);
+                Eqdb.checkStatus(count, eid);
+                boolean isSuccess = db.addBRecord(1, eid);
+                if (isSuccess) {
+                    response.sendRedirect("/com.ws8_220348826/HandleEquipment?action=list");
+                }
             } else {
-            PrintWriter out = response.getWriter();
-            out.println("This Equipment is not available!");
-            } 
-        } else if  ("return".equalsIgnoreCase(action)) {
+                PrintWriter out = response.getWriter();
+                out.println("This Equipment is not available!");
+            }
+        } else if ("return".equalsIgnoreCase(action)) {
             int bid = Integer.parseInt(request.getParameter("bid"));
             db.UpdateReturnStatus(bid);
             response.sendRedirect("/com.ws8_220348826/USERS/User.jsp");
 
-        }else if  ("takeorder".equalsIgnoreCase(action)) {
+        } else if ("takeorder".equalsIgnoreCase(action)) {
             int bid = Integer.parseInt(request.getParameter("bid"));
             db.UpdateTakeOrderStatus(bid);
-            response.sendRedirect(""+request.getContextPath()+"/HandleBorrowRecord?action=cList");
+            response.sendRedirect("" + request.getContextPath() + "/HandleBorrowRecord?action=cList");
 
-        }else if  ("finishOrder".equalsIgnoreCase(action)) {
+        } else if ("finishOrder".equalsIgnoreCase(action)) {
             int bid = Integer.parseInt(request.getParameter("bid"));
             db.UpdateFinishStatus(bid);
-            response.sendRedirect(""+request.getContextPath()+"/HandleBorrowRecord?action=OrderList");
+            response.sendRedirect("" + request.getContextPath() + "/HandleBorrowRecord?action=OrderList");
 
-        }
-        else {
+        } else if ("addCart".equalsIgnoreCase(action)) {
+            int eid = Integer.parseInt(request.getParameter("eid"));
+            HttpSession session = request.getSession(); // Get the session object
+            EquipmentBean eq = Eqdb.queryEqById(eid);
+            ArrayList<EquipmentBean> eqs = (ArrayList<EquipmentBean>) session.getAttribute("equipments");
+            eqs.add(eq);
+        } else {
             PrintWriter out = response.getWriter();
             out.println("No such action!!!");
         }

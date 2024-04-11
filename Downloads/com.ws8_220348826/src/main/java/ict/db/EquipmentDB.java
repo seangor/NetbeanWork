@@ -40,7 +40,7 @@ public class EquipmentDB {
         PreparedStatement pStmnt = null;
         try {
             cnnct = getConnection();
-            String query = "SELECT e.Eid, e.EName, e.EStatus, e.Quantity, w.wid "
+            String query = "SELECT e.Eid, e.EName, e.EStatus, e.Quantity, w.wid, e.imgsrc "
                     + "FROM Equipment e "
                     + "LEFT JOIN Wishlist w ON w.eid = e.Eid";
             pStmnt = cnnct.prepareStatement(query);
@@ -56,6 +56,7 @@ public class EquipmentDB {
                 eb.setEstatus(rs.getString(3));
                 eb.setQuantity(rs.getInt(4));
                 eb.setWid(rs.getInt(5));
+                eb.setImgsrc(rs.getString(6));
                 list.add(eb);
             }
             return list;
@@ -82,7 +83,7 @@ public class EquipmentDB {
         PreparedStatement pStmnt = null;
         try {
             cnnct = getConnection();
-            String preQueryStatement = "SELECT Eid, EName, EStatus, Quantity FROM Equipment WHERE eid = ?";
+            String preQueryStatement = "SELECT Eid, EName, EStatus, Quantity, imgsrc FROM Equipment WHERE eid = ?";
             pStmnt = cnnct.prepareStatement(preQueryStatement);
             pStmnt.setInt(1, eid);
             ResultSet rs = pStmnt.executeQuery();
@@ -93,6 +94,7 @@ public class EquipmentDB {
                 eb.setEName(rs.getString(2));
                 eb.setEstatus(rs.getString(3));
                 eb.setQuantity(rs.getInt(4));
+                eb.setImgsrc(rs.getString(5));
             }
 
             return eb;
