@@ -176,6 +176,9 @@
         <a href="/com.ws8_220348826/HandleBorrowRecord?action=list">View Record</a>
         <a href="FUNCTION/ReturnEquipment.jsp">Return Equipment</a>
         <a href="/com.ws8_220348826/HandleWishlist?action=notice">Notification</a>
+                <a href="FUNCTION/View_information.jsp">View personal Info & update password/Info</a>
+                <a href="FUNCTION/View_information.jsp">View personal Info & update password/Info</a>
+
     </body>
 
 </html>
