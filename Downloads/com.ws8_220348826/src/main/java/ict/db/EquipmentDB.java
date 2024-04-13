@@ -11,6 +11,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class EquipmentDB {
@@ -161,9 +163,11 @@ public class EquipmentDB {
         try {
             cnnct = getConnection();
             String preQueryStatement = "UPDATE Equipment SET Quantity = ? WHERE eid = ?";
+
             pStmnt = cnnct.prepareStatement(preQueryStatement);
             pStmnt.setInt(1, count);
             pStmnt.setInt(2, eid);
+
             int rowCount = pStmnt.executeUpdate();
             if (rowCount > 0) {
                 isSuccess = true;

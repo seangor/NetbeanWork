@@ -4,7 +4,6 @@
  */
 package ict.servlet;
 
-
 import ict.bean.EquipmentBean;
 import ict.db.EquipmentDB;
 import java.io.IOException;
@@ -23,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "HandleEquipment", urlPatterns = {"/HandleEquipment"})
 public class HandleEquipment extends HttpServlet {
+
     private EquipmentDB Edb;
 
     @Override
@@ -57,25 +57,28 @@ public class HandleEquipment extends HttpServlet {
 
         if ("list".equalsIgnoreCase(action)) {
             ArrayList<EquipmentBean> Equipments = Edb.queryEq();
-            request.setAttribute("Equipments",Equipments);
+            request.setAttribute("Equipments", Equipments);
             RequestDispatcher rd;
             rd = getServletContext().getRequestDispatcher("/USERS/FUNCTION/ViewEquipment.jsp");
             rd.forward(request, response);
-        }else if ("search".equalsIgnoreCase(action)) {
+        } else if ("search".equalsIgnoreCase(action)) {
             String name = request.getParameter("equipments");
             if (name != null) {
-            ArrayList<EquipmentBean> Eqs = Edb.queryEqByName(name);
-            request.setAttribute("Equipments", Eqs);
+                ArrayList<EquipmentBean> Eqs = Edb.queryEqByName(name);
+                request.setAttribute("Equipments", Eqs);
+                RequestDispatcher rd;
+                rd = getServletContext().getRequestDispatcher("/USERS/FUNCTION/ViewEquipment.jsp");
+                rd.forward(request, response);
+            }
+        } else if ("cart".equalsIgnoreCase(action)) {
             RequestDispatcher rd;
-            rd = getServletContext().getRequestDispatcher("/USERS/FUNCTION/ViewEquipment.jsp");
+            rd = getServletContext().getRequestDispatcher("/USERS/FUNCTION/ViewCart.jsp");
             rd.forward(request, response);
-            } else {
+        } else {
             PrintWriter out = response.getWriter();
             out.println("No such action!!!");
         }
-    }
-    }
-    
 
+    }
 
 }

@@ -140,6 +140,7 @@
                     if (session.getAttribute("equipments") == null) {
                         session.setAttribute("equipments", new ArrayList<EquipmentBean>());
                     }
+
                     out.println("<h1>查看裝置狀態</h1>");
                     out.println("<a href=\"" + request.getContextPath() + "/USERS/FUNCTION/ViewCart.jsp\">查看預訂列表</a>");
                     out.println("<table border='1' >");
@@ -163,11 +164,23 @@
 
                         }
                         out.println("</a></td>");
-                        out.println("<td><form action=handleEdit method=get >"
-                        + "<input type=hidden name=action value=addCart />"
-                        + "<input type=hidden name=eid value="+c.getEid()+" />"
-                        + "<input type=submit value=預訂 />"
-                        + "</form></td>");
+                        if (c.getQuantity() == 0) {
+                            out.println("<td>"
+                                    + "<input type=submit value=沽清 disabled />"
+                                    + "</td>");
+                        } else if (session.getAttribute("E" + c.getEid()) == null) {
+                            out.println("<td><form action=handleEdit method=get >"
+                                    + "<input type=hidden name=action value=addCart />"
+                                    + "<input type=hidden name=eid value=" + c.getEid() + " />"
+                                    + "<input type=submit value=預訂 />"
+                                    + "</form></td>");
+                        } else {
+                            out.println("<td><form action=handleEdit method=get >"
+                                    + "<input type=hidden name=action value=removeCart />"
+                                    + "<input type=hidden name=eid value=" + c.getEid() + " />"
+                                    + "<input type=submit value=取消選擇 />"
+                                    + "</form></td>");
+                        }
 
                         out.println("</tr>");
                     }
