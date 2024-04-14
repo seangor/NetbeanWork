@@ -4,6 +4,8 @@
  */
 package ict.db;
 
+import ict.bean.OrderBean;
+import ict.bean.OrderitemBean;
 import ict.bean.RecordBean;
 import java.io.IOException;
 import java.sql.Connection;
@@ -24,13 +26,11 @@ public class OrderDB {
     private String url = "";
     private String username = "";
     private String password = "";
-    EquipmentDB Eqdb;
 
     public OrderDB(String url, String username, String password) {
         this.url = url;
         this.username = username;
         this.password = password;
-        Eqdb = new EquipmentDB(url, username, password);
     }
 
     public Connection getConnection() throws SQLException, IOException {
@@ -39,21 +39,138 @@ public class OrderDB {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
         }
-
         return DriverManager.getConnection(url, username, password);
     }
 
-    public boolean addOrder(int uid, LocalDateTime selectedDateTime) {
+    public ArrayList queryOrder() {
+        Connection cnnct = null;
+        PreparedStatement pStmnt = null;
+        try {
+            cnnct = getConnection();
+            String query = "SELECT Orderid, CreatedDate, uid, DeliveryDate, DeliveryTime, Status "
+                    + "FROM eqorder "
+                    + "ORDER BY CreatedDate ASC";
+            pStmnt = cnnct.prepareStatement(query);
+            //Statement s = cnnct.createStatement();
+            ResultSet rs = pStmnt.executeQuery();
+
+            ArrayList list = new ArrayList();
+
+            while (rs.next()) {
+                OrderBean eb = new OrderBean();
+                eb.setOrderId(rs.getInt(1));
+                eb.setCreatedTime(rs.getString(2));
+                eb.setUid(rs.getInt(3));
+                eb.setDeliverdate(rs.getString(4));
+                eb.setDelivertime(rs.getString(5));
+                eb.setStatus(rs.getString(6));
+                list.add(eb);
+            }
+            return list;
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (cnnct != null) {
+                try {
+                    cnnct.close();
+                } catch (SQLException sqlEx) {
+                }
+            }
+        }
+        return null;
+    }
+    
+    
+        public ArrayList queryItemById(int orderid) {
+        Connection cnnct = null;
+        PreparedStatement pStmnt = null;
+        try {
+            cnnct = getConnection();
+            String query = "SELECT orderId, eid from orderitem WHERE orderId = ?";
+            pStmnt = cnnct.prepareStatement(query);
+            
+            pStmnt.setInt(1, orderid);
+            
+            ResultSet rs = pStmnt.executeQuery();
+
+            ArrayList list = new ArrayList();
+
+            while (rs.next()) {
+                OrderitemBean ob = new OrderitemBean();
+                ob.setOrderid(rs.getInt(1));
+                ob.setEid(rs.getInt(2));
+                list.add(ob);
+            }
+            return list;
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (cnnct != null) {
+                try {
+                    cnnct.close();
+                } catch (SQLException sqlEx) {
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean addOrder(int uid, String formattedDate, String formattedTime) {
         Connection cnnct = null;
         PreparedStatement pStmnt = null;
         boolean isSuccess = false;
         try {
-            Timestamp timestamp = Timestamp.valueOf(selectedDateTime);
             cnnct = getConnection();
-            String preQueryStatement = "INSERT INTO `Order` (DeliveryDate, uid, CreatedDate, ID_Flag) VALUES (?, ?, NOW(), 'X')";
+            String preQueryStatement = "INSERT INTO eqorder (uid, DeliveryDate, deliveryTime, ID_Flag, status, CreatedDate) VALUES (?, ?, ?, 'X', 'In Progress', NOW())";
             pStmnt = cnnct.prepareStatement(preQueryStatement);
+            pStmnt.setInt(1, uid);
+            pStmnt.setString(2, formattedDate);
+            pStmnt.setString(3, formattedTime);
 
-            pStmnt.setTimestamp(1, timestamp);
+            int rowCount = pStmnt.executeUpdate();
+
+            if (rowCount > 0) {
+                isSuccess = true;
+            }
+            pStmnt.close();
+            cnnct.close();
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (cnnct != null) {
+                try {
+                    cnnct.close();
+                } catch (SQLException sqlEx) {
+                }
+            }
+        }
+        return isSuccess;
+    }
+
+    public boolean addBRecord(int uid, int eid) {
+        Connection cnnct = null;
+        PreparedStatement pStmnt = null;
+        boolean isSuccess = false;
+        try {
+            cnnct = getConnection();
+            String preQueryStatement = "INSERT INTO BorrowRecord (eid, uid) VALUES (?, ?)";
+            pStmnt = cnnct.prepareStatement(preQueryStatement);
+            pStmnt.setInt(1, eid);
             pStmnt.setInt(2, uid);
 
             int rowCount = pStmnt.executeUpdate();
@@ -124,7 +241,7 @@ public class OrderDB {
         boolean isSuccess = false;
         try {
             cnnct = getConnection();
-            String preQueryStatement = "UPDATE `order` SET ID_Flag = ''";
+            String preQueryStatement = "UPDATE eqorder SET ID_Flag = ''";
             pStmnt = cnnct.prepareStatement(preQueryStatement);
             int rowCount = pStmnt.executeUpdate();
 
@@ -158,7 +275,7 @@ public class OrderDB {
 
         try {
             cnnct = getConnection();
-            String preQueryStatement = "SELECT OrderId FROM `order` WHERE ID_Flag = 'X'";
+            String preQueryStatement = "SELECT OrderId FROM eqorder WHERE ID_Flag = 'X'";
             pStmnt = cnnct.prepareStatement(preQueryStatement);
 
             ResultSet resultSet = pStmnt.executeQuery();

@@ -43,29 +43,25 @@
                         <input type="hidden" name="action"  value="add" />
                     </td></tr>
                 <tr><td>
-                        取件日期 & 時間： 
-                        <label for="month">Month:</label>
+                        取件日期 & 時間： <br>
+                        <label for="month">Month/Day:</label>
                         <select id="month" name="month">
                             <% for (int i = 1; i <= 12; i++) {%>
                             <option value="<%= i%>"><%= i%></option>
                             <% } %>
-                        </select>
-
-                        <label for="day">Day:</label>
+                        </select>/
                         <select id="day" name="day">
                             <% for (int i = 1; i <= 31; i++) {%>
                             <option value="<%= i%>"><%= i%></option>
                             <% }%>
                         </select>
-
-                        <label for="hourSelect">Select Hour:</label>    
+<br>
+                        <label for="hourSelect">Select Time:</label>    
                         <select id="hourSelect" name="hour">
-                           <% for (int i = 0; i <= 23; i++) {%>
-                            <option value="<%= i%>"><%= i%>：00</option>
+                            <% for (int i = 9; i <= 18; i++) {%>
+                            <option value="<%= i%>"><%= i%></option>
                             <% } %>
-                        </select>
-
-                        <label for="minuteSelect">Select Minute:</label>
+                        </select>:
                         <select id="minuteSelect" name="minute">
                             <% for (int i = 0; i < 60; i += 15) {%>
                             <option value="<%= i%>"><%= String.format("%02d", i)%></option>
@@ -77,8 +73,8 @@
             <%if (!eqs.isEmpty()) {%>
             <input type="submit" value="confirm" />
             <%} else {%>
-              <input type="submit" value="confirm" disabled />
-              <% } %>
+            <input type="submit" value="confirm" disabled />
+            <% }%>
         </form>
     </body>
 </html>

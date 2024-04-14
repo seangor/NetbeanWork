@@ -13,7 +13,6 @@ import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,8 +24,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author sean3
  */
-@WebServlet(name = "handleEdit", urlPatterns = {"/handleEdit"})
-public class handleEdit extends HttpServlet {
+@WebServlet(name = "HandleStatus", urlPatterns = {"/HandleStatus"})
+public class HandleStatus extends HttpServlet {
 
     private UserRecord db;
     private EquipmentDB Eqdb;
