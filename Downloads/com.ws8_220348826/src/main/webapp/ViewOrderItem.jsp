@@ -15,6 +15,8 @@
         <title>JSP Page</title>
     </head>
     <body>
+                                                     <a href="<%= request.getContextPath()%>/index.jsp">返回Index</a>
+
         <%
             ArrayList<OrderitemBean> eqs = (ArrayList<OrderitemBean>) request.getAttribute("OrderItemList");
             String action = request.getParameter("action");

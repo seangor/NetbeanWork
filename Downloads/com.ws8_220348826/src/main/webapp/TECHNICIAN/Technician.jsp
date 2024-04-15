@@ -12,8 +12,9 @@
         <title>JSP Page</title>
     </head>
     <body>
-                <a href="<%= request.getContextPath()%>/HandleOrder?action=approvelist">View Order</a>
+                                                     <a href="<%= request.getContextPath()%>/index.jsp">返回Index</a>
 
+        <a href="<%= request.getContextPath()%>/HandleTechnicianOrder?action=approvelist">View Order</a>
         <ul><li>查看訂購通知記錄和狀態</li>
             <li>查看訂購運送過程記錄和狀態</li>
             <li>批准訂購通知</li>

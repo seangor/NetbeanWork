@@ -65,12 +65,6 @@ public class HandleOrder extends HttpServlet {
             RequestDispatcher rd;
             rd = getServletContext().getRequestDispatcher("/ViewOrder.jsp");
             rd.forward(request, response);
-        } else if ("approvelist".equalsIgnoreCase(action)) {
-            ArrayList<OrderBean> obs = orderdb.queryOrder();
-            request.setAttribute("OrderList", obs);
-            RequestDispatcher rd;
-            rd = getServletContext().getRequestDispatcher("/ViewOrder.jsp");
-            rd.forward(request, response);
-        }
+        } 
     }
 }
