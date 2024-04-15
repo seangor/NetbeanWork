@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author sean3
  */
-@WebServlet(name = "HandleBorrowRecord", urlPatterns = {"/HandleOrder"})
+@WebServlet(name = "HandleOrder", urlPatterns = {"/HandleOrder"})
 public class HandleOrder extends HttpServlet {
 
     private OrderDB orderdb;
@@ -64,6 +64,7 @@ public class HandleOrder extends HttpServlet {
             request.setAttribute("OrderList", obs);
             RequestDispatcher rd;
             rd = getServletContext().getRequestDispatcher("/ViewOrder.jsp");
+            
             rd.forward(request, response);
         } 
     }

@@ -57,13 +57,26 @@ public class HandleBorrowRecord extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         String action = request.getParameter("action");
-        if ("list".equalsIgnoreCase(action)) {
+        if ("Recordlist".equalsIgnoreCase(action)) {
             ArrayList<RecordBean> rbs = Udb.queryBRec();
             request.setAttribute("BRecord", rbs);
             RequestDispatcher rd;
             rd = getServletContext().getRequestDispatcher("/USERS/FUNCTION/ViewRecord.jsp");
             rd.forward(request, response);
-        } 
+        }  else if ("checkout".equalsIgnoreCase(action)) {
+            ArrayList<RecordBean> rbs = new ArrayList<RecordBean>();
+
+            String[] bidlength = request.getParameterValues("selectedEq");
+            for (int i = 0; i < bidlength.length; i++) {
+                int bid = Integer.parseInt(bidlength[i]);
+                RecordBean rb = Udb.queryBRecById(bid);
+                rbs.add(rb);
+            }
+            request.setAttribute("CheckOutList", rbs);
+            RequestDispatcher rd;
+            rd = getServletContext().getRequestDispatcher("/USERS/FUNCTION/ViewReturnCheckout.jsp");
+            rd.forward(request, response);
+        }
 
     }
 

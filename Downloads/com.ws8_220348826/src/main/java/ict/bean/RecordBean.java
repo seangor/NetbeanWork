@@ -18,6 +18,15 @@ public class RecordBean implements Serializable {
     private String borrowDate;
     private String Deadline;
     private String status;
+    private String imgsrc;
+
+    public String getImgsrc() {
+        return imgsrc;
+    }
+
+    public void setImgsrc(String imgsrc) {
+        this.imgsrc = imgsrc;
+    }
 
     public String getStatus() {
         return status;

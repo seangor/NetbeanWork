@@ -89,28 +89,13 @@ public class handleEdit extends HttpServlet {
                 Eqdb.borrowEquipment(count, eid);
                 Eqdb.checkStatus(count, eid);
                 order_db.addOrderItem(orderId, eid);
-                            session.removeAttribute("E"+eid);
+                session.removeAttribute("E" + eid);
             }
             order_db.UpdateFlag();
             session.removeAttribute("equipments");
             if (success) {
                 response.sendRedirect("" + request.getContextPath() + "/HandleBorrowRecord?action=List");
             }
-
-        } else if ("return".equalsIgnoreCase(action)) {
-            int bid = Integer.parseInt(request.getParameter("bid"));
-            db.UpdateReturnStatus(bid);
-            response.sendRedirect("/com.ws8_220348826/USERS/User.jsp");
-
-        } else if ("takeorder".equalsIgnoreCase(action)) {
-            int bid = Integer.parseInt(request.getParameter("bid"));
-            db.UpdateTakeOrderStatus(bid);
-            response.sendRedirect("" + request.getContextPath() + "/HandleBorrowRecord?action=cList");
-
-        } else if ("finishOrder".equalsIgnoreCase(action)) {
-            int bid = Integer.parseInt(request.getParameter("bid"));
-            db.UpdateFinishStatus(bid);
-            response.sendRedirect("" + request.getContextPath() + "/HandleBorrowRecord?action=OrderList");
 
         } else if ("addCart".equalsIgnoreCase(action)) {
             int eid = Integer.parseInt(request.getParameter("eid"));
