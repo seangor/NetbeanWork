@@ -132,6 +132,50 @@ public class OrderDB {
         }
         return null;
     }
+    
+       public OrderBean queryOrderById(int orderid) {
+        Connection cnnct = null;
+        PreparedStatement pStmnt = null;
+        try {
+            cnnct = getConnection();
+            String query = "SELECT Orderid, CreatedDate, eqorder.uid, DeliveryDate, DeliveryTime, Status , tel "
+                    + "FROM eqorder Inner JOIN user on eqorder.uid = user.uid WHERE orderid = ? "
+                    + "ORDER BY CreatedDate ASC";
+            pStmnt = cnnct.prepareStatement(query);
+
+            pStmnt.setInt(1, orderid);
+
+            ResultSet rs = pStmnt.executeQuery();
+            
+                OrderBean eb = new OrderBean();
+
+            while (rs.next()) {
+                eb.setOrderId(rs.getInt(1));
+                eb.setCreatedTime(rs.getString(2));
+                eb.setUid(rs.getInt(3));
+                eb.setDeliverdate(rs.getString(4));
+                eb.setDelivertime(rs.getString(5));
+                eb.setStatus(rs.getString(6));
+                eb.setTel(rs.getString(7));
+            }
+            return eb;
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (cnnct != null) {
+                try {
+                    cnnct.close();
+                } catch (SQLException sqlEx) {
+                }
+            }
+        }
+        return null;
+    }
 
     public ArrayList queryItemById(int orderid) {
         Connection cnnct = null;

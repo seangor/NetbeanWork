@@ -170,6 +170,8 @@
 
             </div>
         </div>
+                                     <a href="<%= request.getContextPath()%>/index.jsp">返回Index</a>
+
         <a href="<%= request.getContextPath()%>/HandleEquipment?action=list">View Equipment</a>
         <a href="FUNCTION/addRecord.jsp">Borrow Equipment</a>
         <a href="FUNCTION/SearchEquipment.jsp">Search Equipment</a>

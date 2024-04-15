@@ -143,6 +143,8 @@
 
                     out.println("<h1>查看裝置狀態</h1>");
                     out.println("<a href=\"" + request.getContextPath() + "/USERS/FUNCTION/ViewCart.jsp\">查看預訂列表</a>");
+                     out.println("<a href=\"" + request.getContextPath() + "/USERS/User.jsp\">返回User</a>");
+
                     out.println("<table border='1' >");
                     out.println("<tr>");
                     out.println("<th>ID</th><th>圖片</th><th>名字</th><th>狀態</th><th>數量</th><th>加入願望清單</th><th>加入預訂</th>");

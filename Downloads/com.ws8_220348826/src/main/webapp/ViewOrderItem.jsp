@@ -4,6 +4,7 @@
     Author     : sean3
 --%>
 
+<%@page import="ict.bean.OrderBean"%>
 <%@page import="ict.bean.OrderitemBean"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -16,7 +17,8 @@
     <body>
         <%
             ArrayList<OrderitemBean> eqs = (ArrayList<OrderitemBean>) request.getAttribute("OrderItemList");
-
+            String action = request.getParameter("action");
+            OrderBean Order = (OrderBean) request.getAttribute("Order");
         %> 
         <h1>查看訂單物品</h1>
         <span>Order ID: <%=eqs.get(0).getOrderid()%></span><br>
@@ -37,10 +39,18 @@
             </tr>
             <% }%>
         </table> 
-        <form action="<%=request.getContextPath()%>/HandleStatus">
+             <% if (action.equalsIgnoreCase("approvelist")) {
+             if ( Order.getStatus().equalsIgnoreCase("In Progress")) {
+                 %>
+                    <form action="<%=request.getContextPath()%>/HandleStatus">
             <input type="hidden" name="action" value="UpApprove" />
             <input type="hidden" name="orderid" value="<%=eqs.get(0).getOrderid()%>" />
             <input type="submit" value="批准"/>
         </form>
+            <%} else { %>
+                        <input type="submit" value="已批准" disabled/>
+
+                        <%}
+                            }%>
     </body>
 </html>

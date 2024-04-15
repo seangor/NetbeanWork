@@ -33,11 +33,15 @@
                 <td><%=c.getCreatedTime()%></td>
                 <td><%=c.getStatus()%></td>
                 <td><%=c.getTel()%></td>
-                <td><form action="<%=request.getContextPath()%>/HandleStatus">
+                <td><% if (c.getStatus().equalsIgnoreCase("delivering")) {%>
+                    <form action="<%=request.getContextPath()%>/HandleStatus">
                         <input type="hidden" name="action" value="UpFinish" >
                         <input type="hidden" name="orderid" value="<%=c.getOrderId()%>" >
                         <input type="submit" value="送達" style="background:none!important; border:none; padding:0!important; color:blue; text-decoration:underline; cursor:pointer;"></form></td>
             </tr>
-            <% }%>
+            <%} else {%>
+                        <input type="submit" value="已送達" style="background:none!important; border:none; padding:0!important; color:blue; text-decoration:underline; cursor:pointer;" disabled></form></td>
+<%}
+}%>
         </table>    </body>
 </html>

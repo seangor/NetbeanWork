@@ -16,8 +16,10 @@
     <body>
         <%
             ArrayList<OrderBean> eqs = (ArrayList<OrderBean>) request.getAttribute("OrderList");
-
+            String action = request.getParameter("action");
         %> 
+        <%=request.getParameter("action")%>
+
         <h1>查看訂單</h1>
         <table border='1' >
             <tr>
@@ -34,8 +36,12 @@
                 <td><%=c.getStatus()%></td>
                 <td><%=c.getTel()%></td>
 
-                <td><form action="<%=request.getContextPath()%>/HandleOrder">
-                        <input type="hidden" name="action" value="orderitem" >
+                <td><form action="<%=request.getContextPath()%>/HandleOrderItem">
+                        <%if (action.equalsIgnoreCase("approvelist")) {%>
+                        <input type="hidden" name="action" value="approvelist" >
+                        <% } else if (action.equalsIgnoreCase("list")) {%>
+                        <input type="hidden" name="action" value="list" >
+                        <% }%>
                         <input type="hidden" name="orderid" value="<%=c.getOrderId()%>" >
                         <input type="submit" value="查看細節" style="background:none!important; border:none; padding:0!important; color:blue; text-decoration:underline; cursor:pointer;"></form></td>
             </tr>

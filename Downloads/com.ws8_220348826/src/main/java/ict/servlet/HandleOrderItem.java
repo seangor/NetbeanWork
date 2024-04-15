@@ -4,13 +4,9 @@
  */
 package ict.servlet;
 
-import ict.bean.EquipmentBean;
 import ict.bean.OrderBean;
 import ict.bean.OrderitemBean;
-import ict.bean.RecordBean;
-import ict.db.EquipmentDB;
 import ict.db.OrderDB;
-import ict.db.UserRecord;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -25,8 +21,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author sean3
  */
-@WebServlet(name = "HandleBorrowRecord", urlPatterns = {"/HandleOrder"})
-public class HandleOrder extends HttpServlet {
+@WebServlet(name = "HandleOrderItem", urlPatterns = {"/HandleOrderItem"})
+public class HandleOrderItem extends HttpServlet {
 
     private OrderDB orderdb;
 
@@ -59,17 +55,20 @@ public class HandleOrder extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         String action = request.getParameter("action");
+        int orderid = Integer.parseInt(request.getParameter("orderid"));
         if ("list".equalsIgnoreCase(action)) {
-            ArrayList<OrderBean> obs = orderdb.queryOrder();
-            request.setAttribute("OrderList", obs);
+            ArrayList<OrderitemBean> obs = orderdb.queryItemById(orderid);
+            request.setAttribute("OrderItemList", obs);
             RequestDispatcher rd;
-            rd = getServletContext().getRequestDispatcher("/ViewOrder.jsp");
+            rd = getServletContext().getRequestDispatcher("/ViewOrderItem.jsp");
             rd.forward(request, response);
         } else if ("approvelist".equalsIgnoreCase(action)) {
-            ArrayList<OrderBean> obs = orderdb.queryOrder();
-            request.setAttribute("OrderList", obs);
+            ArrayList<OrderitemBean> obs = orderdb.queryItemById(orderid);
+            OrderBean ob = orderdb.queryOrderById(orderid);
+            request.setAttribute("Order", ob);
+            request.setAttribute("OrderItemList", obs);
             RequestDispatcher rd;
-            rd = getServletContext().getRequestDispatcher("/ViewOrder.jsp");
+            rd = getServletContext().getRequestDispatcher("/ViewOrderItem.jsp");
             rd.forward(request, response);
         }
     }
