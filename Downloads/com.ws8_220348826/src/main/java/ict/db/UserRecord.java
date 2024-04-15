@@ -48,7 +48,7 @@ public class UserRecord {
         boolean isSuccess = false;
         try {
             cnnct = getConnection();
-            String preQueryStatement = "INSERT INTO BorrowRecord (eid, uid) VALUES (?, ?)";
+            String preQueryStatement = "INSERT INTO BorrowRecord (eid, uid, borrowDate,deadline) VALUES (?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 3 DAY))";
             pStmnt = cnnct.prepareStatement(preQueryStatement);
             pStmnt.setInt(1, eid);
             pStmnt.setInt(2, uid);

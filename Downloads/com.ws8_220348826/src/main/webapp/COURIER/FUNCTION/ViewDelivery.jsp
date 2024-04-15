@@ -1,6 +1,6 @@
 <%-- 
-    Document   : ViewOrder
-    Created on : 14 Apr 2024, 3:11:11 am
+    Document   : ViewDelivery
+    Created on : 15 Apr 2024, 1:17:03 am
     Author     : sean3
 --%>
 
@@ -33,13 +33,11 @@
                 <td><%=c.getCreatedTime()%></td>
                 <td><%=c.getStatus()%></td>
                 <td><%=c.getTel()%></td>
-
-                <td><form action="<%=request.getContextPath()%>/HandleOrder">
-                        <input type="hidden" name="action" value="orderitem" >
+                <td><form action="<%=request.getContextPath()%>/HandleStatus">
+                        <input type="hidden" name="action" value="UpFinish" >
                         <input type="hidden" name="orderid" value="<%=c.getOrderId()%>" >
-                        <input type="submit" value="查看細節" style="background:none!important; border:none; padding:0!important; color:blue; text-decoration:underline; cursor:pointer;"></form></td>
+                        <input type="submit" value="送達" style="background:none!important; border:none; padding:0!important; color:blue; text-decoration:underline; cursor:pointer;"></form></td>
             </tr>
             <% }%>
-        </table>
-    </body>
+        </table>    </body>
 </html>

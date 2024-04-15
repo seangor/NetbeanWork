@@ -47,8 +47,8 @@ public class OrderDB {
         PreparedStatement pStmnt = null;
         try {
             cnnct = getConnection();
-            String query = "SELECT Orderid, CreatedDate, uid, DeliveryDate, DeliveryTime, Status "
-                    + "FROM eqorder "
+            String query = "SELECT Orderid, CreatedDate, eqorder.uid, DeliveryDate, DeliveryTime, Status , tel "
+                    + "FROM eqorder Inner JOIN user on eqorder.uid = user.uid "
                     + "ORDER BY CreatedDate ASC";
             pStmnt = cnnct.prepareStatement(query);
             //Statement s = cnnct.createStatement();
@@ -64,6 +64,7 @@ public class OrderDB {
                 eb.setDeliverdate(rs.getString(4));
                 eb.setDelivertime(rs.getString(5));
                 eb.setStatus(rs.getString(6));
+                eb.setTel(rs.getString(7));
                 list.add(eb);
             }
             return list;
@@ -84,18 +85,63 @@ public class OrderDB {
         }
         return null;
     }
-    
-    
-        public ArrayList queryItemById(int orderid) {
+
+    public ArrayList queryOrderByStatus(String status) {
         Connection cnnct = null;
         PreparedStatement pStmnt = null;
         try {
             cnnct = getConnection();
-            String query = "SELECT orderId, eid from orderitem WHERE orderId = ?";
+            String query = "SELECT Orderid, CreatedDate, eqorder.uid, DeliveryDate, DeliveryTime, Status , tel "
+                    + "FROM eqorder Inner JOIN user on eqorder.uid = user.uid WHERE status = ? "
+                    + "ORDER BY CreatedDate ASC";
             pStmnt = cnnct.prepareStatement(query);
-            
+
+            pStmnt.setString(1, status);
+
+            ResultSet rs = pStmnt.executeQuery();
+
+            ArrayList list = new ArrayList();
+
+            while (rs.next()) {
+                OrderBean eb = new OrderBean();
+                eb.setOrderId(rs.getInt(1));
+                eb.setCreatedTime(rs.getString(2));
+                eb.setUid(rs.getInt(3));
+                eb.setDeliverdate(rs.getString(4));
+                eb.setDelivertime(rs.getString(5));
+                eb.setStatus(rs.getString(6));
+                eb.setTel(rs.getString(7));
+
+                list.add(eb);
+            }
+            return list;
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (cnnct != null) {
+                try {
+                    cnnct.close();
+                } catch (SQLException sqlEx) {
+                }
+            }
+        }
+        return null;
+    }
+
+    public ArrayList queryItemById(int orderid) {
+        Connection cnnct = null;
+        PreparedStatement pStmnt = null;
+        try {
+            cnnct = getConnection();
+            String query = "SELECT orderId, orderitem.eid, Imgsrc, EName from orderitem Inner JOIN equipment ON equipment.Eid = orderitem.eid WHERE orderId = ?";
+            pStmnt = cnnct.prepareStatement(query);
             pStmnt.setInt(1, orderid);
-            
+
             ResultSet rs = pStmnt.executeQuery();
 
             ArrayList list = new ArrayList();
@@ -104,6 +150,9 @@ public class OrderDB {
                 OrderitemBean ob = new OrderitemBean();
                 ob.setOrderid(rs.getInt(1));
                 ob.setEid(rs.getInt(2));
+                ob.setImgsrc(rs.getString(3));
+                ob.setEname(rs.getString(4));
+
                 list.add(ob);
             }
             return list;
@@ -144,7 +193,7 @@ public class OrderDB {
             }
             pStmnt.close();
             cnnct.close();
-        } catch (SQLException ex) {
+        } catch (SQLException ex) {  
             while (ex != null) {
                 ex.printStackTrace();
                 ex = ex.getNextException();
@@ -198,6 +247,111 @@ public class OrderDB {
         return isSuccess;
     }
 
+    public boolean apporveOrder(int orderid) {
+        Connection cnnct = null;
+        PreparedStatement pStmnt = null;
+        boolean isSuccess = false;
+        try {
+            cnnct = getConnection();
+            String preQueryStatement = "UPDATE eqorder SET status = 'approved' WHERE orderid = ?";
+            pStmnt = cnnct.prepareStatement(preQueryStatement);
+            pStmnt.setInt(1, orderid);
+
+            int rowCount = pStmnt.executeUpdate();
+
+            if (rowCount > 0) {
+                isSuccess = true;
+            }
+            pStmnt.close();
+            cnnct.close();
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (cnnct != null) {
+                try {
+                    cnnct.close();
+                } catch (SQLException sqlEx) {
+                }
+            }
+        }
+        return isSuccess;
+    }
+
+    public boolean acceptDelivery(int orderid) {
+        Connection cnnct = null;
+        PreparedStatement pStmnt = null;
+        boolean isSuccess = false;
+        try {
+            cnnct = getConnection();
+            String preQueryStatement = "UPDATE eqorder SET status = 'Delivering' WHERE orderid = ?";
+            pStmnt = cnnct.prepareStatement(preQueryStatement);
+            pStmnt.setInt(1, orderid);
+
+            int rowCount = pStmnt.executeUpdate();
+
+            if (rowCount > 0) {
+                isSuccess = true;
+            }
+            pStmnt.close();
+            cnnct.close();
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (cnnct != null) {
+                try {
+                    cnnct.close();
+                } catch (SQLException sqlEx) {
+                }
+            }
+        }
+        return isSuccess;
+    }
+
+        public boolean finishDelivery(int orderid) {
+        Connection cnnct = null;
+        PreparedStatement pStmnt = null;
+        boolean isSuccess = false;
+        try {
+            cnnct = getConnection();
+            String preQueryStatement = "UPDATE eqorder SET status = 'Received' WHERE orderid = ?";
+            pStmnt = cnnct.prepareStatement(preQueryStatement);
+            pStmnt.setInt(1, orderid);
+
+            int rowCount = pStmnt.executeUpdate();
+
+            if (rowCount > 0) {
+                isSuccess = true;
+            }
+            pStmnt.close();
+            cnnct.close();
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (cnnct != null) {
+                try {
+                    cnnct.close();
+                } catch (SQLException sqlEx) {
+                }
+            }
+        }
+        return isSuccess;
+    }
+        
     public boolean addOrderItem(int orderid, int eid) {
         Connection cnnct = null;
         PreparedStatement pStmnt = null;

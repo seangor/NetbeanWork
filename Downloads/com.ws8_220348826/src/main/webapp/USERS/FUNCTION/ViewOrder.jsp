@@ -32,6 +32,8 @@
                 <td><%=c.getDelivertime()%></td>
                 <td><%=c.getCreatedTime()%></td>
                 <td><%=c.getStatus()%></td>
+                <td><%=request.getParameter("action")%></td>
+
             </tr>
             <% }%>
         </table>

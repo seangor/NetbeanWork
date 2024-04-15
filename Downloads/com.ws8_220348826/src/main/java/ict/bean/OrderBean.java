@@ -12,15 +12,23 @@ import java.util.ArrayList;
  * @author sean3
  */
 public class OrderBean implements Serializable {
+
     private String delivertime;
     private String deliverdate;
     private int uid;
     private int orderId;
     private String status;
     private String createdTime;
+    private String tel;
 
+    public String getTel() {
+        return tel;
+    }
 
-    
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
     public OrderBean() {
     }
 

@@ -11,7 +11,13 @@ import java.io.Serializable;
  * @author sean3
  */
 public class OrderitemBean implements Serializable {
-
+    private int eid;
+    private int orderid;
+    private String imgsrc;
+    private String ename;
+    
+        public OrderitemBean() {
+    }
     public int getEid() {
         return eid;
     }
@@ -28,10 +34,20 @@ public class OrderitemBean implements Serializable {
         this.orderid = orderid;
     }
 
-    public OrderitemBean() {
+    public String getImgsrc() {
+        return imgsrc;
     }
 
-    private int eid;
-    private int orderid;
+    public void setImgsrc(String imgsrc) {
+        this.imgsrc = imgsrc;
+    }
+
+    public String getEname() {
+        return ename;
+    }
+
+    public void setEname(String ename) {
+        this.ename = ename;
+    }
 
 }

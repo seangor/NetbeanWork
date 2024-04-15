@@ -14,11 +14,14 @@
         <title>JSP Page</title>
     </head>
     <body>
-    <%
+        <%
             ArrayList<OrderitemBean> eqs = (ArrayList<OrderitemBean>) request.getAttribute("OrderItemList");
 
         %> 
         <h1>查看訂單物品</h1>
+        <span>Order ID: <%=eqs.get(0).getOrderid()%></span><br>
+        <span>Campus: LWL</span> <br>
+        <span>User: Him</span><br>
         <table border='1' >
             <tr>
                 <th>ID</th><th>eid</th>
@@ -27,12 +30,17 @@
                     OrderitemBean c = eqs.get(i);
             %> 
             <tr>
-                <td><%=c.getOrderid()%></td>
-                <td><%=c.getEid()%></td>
+                <td style="width: 80px; text-align: center;"><%= c.getEid()%></td>
+                <td><img src="img/<%=c.getImgsrc()%>" width="80px" height="80px" alt="alt"/></td>
+                <td><%=c.getEname()%></td>
 
             </tr>
             <% }%>
         </table> 
-        <button>批准送貨</button> 
+        <form action="<%=request.getContextPath()%>/HandleStatus">
+            <input type="hidden" name="action" value="UpApprove" />
+            <input type="hidden" name="orderid" value="<%=eqs.get(0).getOrderid()%>" />
+            <input type="submit" value="批准"/>
+        </form>
     </body>
 </html>

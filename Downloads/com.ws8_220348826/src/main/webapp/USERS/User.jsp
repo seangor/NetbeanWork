@@ -173,11 +173,11 @@
         <a href="<%= request.getContextPath()%>/HandleEquipment?action=list">View Equipment</a>
         <a href="FUNCTION/addRecord.jsp">Borrow Equipment</a>
         <a href="FUNCTION/SearchEquipment.jsp">Search Equipment</a>
+        <a href="<%= request.getContextPath()%>/HandleOrder?action=list">View Order</a>
         <a href="/com.ws8_220348826/HandleBorrowRecord?action=list">View Record</a>
         <a href="FUNCTION/ReturnEquipment.jsp">Return Equipment</a>
-        <a href="/com.ws8_220348826/HandleWishlist?action=notice">Notification</a>
         <a href="FUNCTION/View_information.jsp">View personal Info & update password/Info</a>
-        <a href="<%= request.getContextPath()%>/HandleOrder?action=list">View Order</a>
+        <a href="/com.ws8_220348826/HandleWishlist?action=notice">Notification</a>
 
         <form action="<%= request.getContextPath()%>/handleEdit" method="get" >
             <input name="action" value="add" />

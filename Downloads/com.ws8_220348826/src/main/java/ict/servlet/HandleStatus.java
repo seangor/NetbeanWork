@@ -5,6 +5,7 @@
 package ict.servlet;
 
 import ict.bean.EquipmentBean;
+import ict.bean.OrderitemBean;
 import ict.db.EquipmentDB;
 import ict.db.OrderDB;
 import ict.db.UserRecord;
@@ -27,8 +28,7 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "HandleStatus", urlPatterns = {"/HandleStatus"})
 public class HandleStatus extends HttpServlet {
 
-    private UserRecord db;
-    private EquipmentDB Eqdb;
+    private UserRecord brdb;
     private OrderDB order_db;
 
     @Override
@@ -37,10 +37,9 @@ public class HandleStatus extends HttpServlet {
         String dbPassword = this.getServletContext().getInitParameter("dbPassword");
         String dbUrl = this.getServletContext().getInitParameter("dbUrl");
 
-        db = new UserRecord(dbUrl, dbUser, dbPassword);
-        Eqdb = new EquipmentDB(dbUrl, dbUser, dbPassword);
         order_db = new OrderDB(dbUrl, dbUser, dbPassword);
 
+        brdb = new UserRecord(dbUrl, dbUser, dbPassword);
     }
 
     @Override
@@ -62,80 +61,22 @@ public class HandleStatus extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
+        int orderid = Integer.parseInt(request.getParameter("orderid"));
+        if ("UpApprove".equalsIgnoreCase(action)) {
+            order_db.apporveOrder(orderid);
+            response.sendRedirect(request.getContextPath() + "/HandleOrder?action=apporvelist");
+        } else if ("UpDeliver".equalsIgnoreCase(action)) {
+            order_db.acceptDelivery(orderid);
+            response.sendRedirect(request.getContextPath() + "/HandleOrder?action=CourierOrder");
+        } else if ("UpFinish".equalsIgnoreCase(action)) {
+            order_db.finishDelivery(orderid);
+            ArrayList<OrderitemBean> obs = order_db.queryItemById(orderid);
 
-        if ("add".equalsIgnoreCase(action)) {
-            int year = 2024;
-            int month = Integer.parseInt(request.getParameter("month"));
-            int day = Integer.parseInt(request.getParameter("day"));
-            int hour = Integer.parseInt(request.getParameter("hour"));
-            int minute = Integer.parseInt(request.getParameter("minute"));
-
-            LocalDateTime selectedDateTime = LocalDateTime.of(year, month, day, hour, minute);
-            DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            DateTimeFormatter timeformatter = DateTimeFormatter.ofPattern("HH:mm");
-
-            String formattedDate = selectedDateTime.format(dateformatter);
-            String formattedTime = selectedDateTime.format(timeformatter);
-
-            HttpSession session = request.getSession();
-            ArrayList<EquipmentBean> eqs = (ArrayList<EquipmentBean>) session.getAttribute("equipments");
-            boolean success = order_db.addOrder(1, formattedDate, formattedTime);
-            int orderId = order_db.getIdByFlag();
-            for (EquipmentBean eq : eqs) {
-                int eid = eq.getEid();
-                eq = Eqdb.queryEqById(eid);
-                int count = eq.getQuantity();
-                Eqdb.borrowEquipment(count, eid);
-                Eqdb.checkStatus(count, eid);
-                order_db.addOrderItem(orderId, eid);
-                            session.removeAttribute("E"+eid);
+            for (OrderitemBean ob : obs) {
+                int eid = ob.getEid();
+                brdb.addBRecord(1, eid);
             }
-            order_db.UpdateFlag();
-            session.removeAttribute("equipments");
-            if (success) {
-                response.sendRedirect("" + request.getContextPath() + "/HandleBorrowRecord?action=List");
-            }
-
-        } else if ("return".equalsIgnoreCase(action)) {
-            int bid = Integer.parseInt(request.getParameter("bid"));
-            db.UpdateReturnStatus(bid);
-            response.sendRedirect("/com.ws8_220348826/USERS/User.jsp");
-
-        } else if ("takeorder".equalsIgnoreCase(action)) {
-            int bid = Integer.parseInt(request.getParameter("bid"));
-            db.UpdateTakeOrderStatus(bid);
-            response.sendRedirect("" + request.getContextPath() + "/HandleBorrowRecord?action=cList");
-
-        } else if ("finishOrder".equalsIgnoreCase(action)) {
-            int bid = Integer.parseInt(request.getParameter("bid"));
-            db.UpdateFinishStatus(bid);
-            response.sendRedirect("" + request.getContextPath() + "/HandleBorrowRecord?action=OrderList");
-
-        } else if ("addCart".equalsIgnoreCase(action)) {
-            int eid = Integer.parseInt(request.getParameter("eid"));
-            HttpSession session = request.getSession(); // Get the session object
-            EquipmentBean eq = Eqdb.queryEqById(eid);
-            ArrayList<EquipmentBean> eqs = (ArrayList<EquipmentBean>) session.getAttribute("equipments");
-            session.setAttribute("E" + eid, eid);
-            eqs.add(eq);
-            response.sendRedirect("" + request.getContextPath() + "/HandleEquipment?action=list");
-
-        } else if ("removeCart".equalsIgnoreCase(action)) {
-            int eid = Integer.parseInt(request.getParameter("eid"));
-            HttpSession session = request.getSession();
-            ArrayList<EquipmentBean> eqs = (ArrayList<EquipmentBean>) session.getAttribute("equipments");
-            EquipmentBean removedEquipment = null;
-            for (EquipmentBean eq : eqs) {
-                if (eq.getEid() == eid) {
-                    removedEquipment = eq;
-                    break;
-                }
-            }
-            if (removedEquipment != null) {
-                eqs.remove(removedEquipment);
-            }
-            session.removeAttribute("E" + eid);
-            response.sendRedirect(request.getContextPath() + "/HandleEquipment?action=list");
+            response.sendRedirect(request.getContextPath() + "/HandleOrder?action=Courierdeliver");
         } else {
             PrintWriter out = response.getWriter();
             out.println("No such action!!!");
