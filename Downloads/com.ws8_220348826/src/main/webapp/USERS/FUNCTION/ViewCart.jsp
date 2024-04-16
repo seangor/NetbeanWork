@@ -32,6 +32,7 @@
                 if (session.getAttribute("equipments") == null) {
                     session.setAttribute("equipments", new ArrayList<EquipmentBean>());
                 }
+
                 for (int i = 0; i < eqs.size(); i++) {
                     EquipmentBean c = eqs.get(i);
             %>
@@ -49,6 +50,7 @@
                 <tr>
                     <td>
                         <input type="hidden" name="action"  value="add" />
+                        <input type="hidden" name="Ordertype"  value="borrow" />
                     </td></tr>
                 <tr><td>
                         取件日期 & 時間： <br>

@@ -169,7 +169,7 @@ public class UserRecord {
         boolean isSuccess;
         try {
             cnnct = getConnection();
-            String preQueryStatement = "UPDATE borrowrecord SET status = \"finished\" WHERE bid = ?";
+            String preQueryStatement = "UPDATE borrowrecord SET status = \"Returning\" WHERE bid = ?";
             pStmnt = cnnct.prepareStatement(preQueryStatement);
             pStmnt.setInt(1, bid);
             int rowCount = pStmnt.executeUpdate();

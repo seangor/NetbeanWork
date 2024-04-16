@@ -5,6 +5,7 @@
 package ict.servlet;
 
 import ict.bean.EquipmentBean;
+import ict.bean.RecordBean;
 import ict.db.EquipmentDB;
 import ict.db.OrderDB;
 import ict.db.UserRecord;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.jsp.PageContext;
 
 /**
  *
@@ -77,24 +79,36 @@ public class handleEdit extends HttpServlet {
 
             String formattedDate = selectedDateTime.format(dateformatter);
             String formattedTime = selectedDateTime.format(timeformatter);
-
+            String type = (String) request.getParameter("Ordertype");
             HttpSession session = request.getSession();
-            ArrayList<EquipmentBean> eqs = (ArrayList<EquipmentBean>) session.getAttribute("equipments");
-            boolean success = order_db.addOrder(1, formattedDate, formattedTime);
+
+            boolean success = order_db.addOrder(1, formattedDate, formattedTime, type);
             int orderId = order_db.getIdByFlag();
-            for (EquipmentBean eq : eqs) {
-                int eid = eq.getEid();
-                eq = Eqdb.queryEqById(eid);
-                int count = eq.getQuantity();
-                Eqdb.borrowEquipment(count, eid);
-                Eqdb.checkStatus(count, eid);
-                order_db.addOrderItem(orderId, eid);
-                session.removeAttribute("E" + eid);
+            if (type.equalsIgnoreCase("borrow")) {
+                ArrayList<EquipmentBean> eqs = new ArrayList<EquipmentBean>();
+                eqs = (ArrayList<EquipmentBean>) session.getAttribute("equipments");
+                for (EquipmentBean eq : eqs) {
+                    int eid = eq.getEid();
+                    eq = Eqdb.queryEqById(eid);
+                    int count = eq.getQuantity();
+                    Eqdb.borrowEquipment(count, eid);
+                    Eqdb.checkStatus(count, eid);
+                    order_db.addOrderItem(orderId, eid);
+                    session.removeAttribute("E" + eid);
+                    session.removeAttribute("equipments");
+                }
+            } else if (type.equalsIgnoreCase("return")) {
+                ArrayList<RecordBean> rbs = new ArrayList<RecordBean>();
+                rbs = (ArrayList<RecordBean>) session.getAttribute("Returnequipments");
+                for (RecordBean eq : rbs) {
+                    int eid = eq.getEid();
+                    order_db.addOrderItem(orderId, eid);
+                    db.UpdateFinishStatus(eid);
+                }
             }
             order_db.UpdateFlag();
-            session.removeAttribute("equipments");
             if (success) {
-                response.sendRedirect("" + request.getContextPath() + "/HandleBorrowRecord?action=List");
+                response.sendRedirect("" + request.getContextPath() + "/USERS/User.jsp");
             }
 
         } else if ("addCart".equalsIgnoreCase(action)) {

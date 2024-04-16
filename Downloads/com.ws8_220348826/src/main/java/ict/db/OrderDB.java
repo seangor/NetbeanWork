@@ -218,17 +218,18 @@ public class OrderDB {
         return null;
     }
 
-    public boolean addOrder(int uid, String formattedDate, String formattedTime) {
+    public boolean addOrder(int uid, String formattedDate, String formattedTime, String type) {
         Connection cnnct = null;
         PreparedStatement pStmnt = null;
         boolean isSuccess = false;
         try {
             cnnct = getConnection();
-            String preQueryStatement = "INSERT INTO eqorder (uid, DeliveryDate, deliveryTime, ID_Flag, status, CreatedDate) VALUES (?, ?, ?, 'X', 'In Progress', NOW())";
+            String preQueryStatement = "INSERT INTO eqorder (uid, DeliveryDate, deliveryTime, ID_Flag, status, CreatedDate, type) VALUES (?, ?, ?, 'X', 'In Progress', NOW(), ?)";
             pStmnt = cnnct.prepareStatement(preQueryStatement);
             pStmnt.setInt(1, uid);
             pStmnt.setString(2, formattedDate);
             pStmnt.setString(3, formattedTime);
+            pStmnt.setString(4, type);
 
             int rowCount = pStmnt.executeUpdate();
 

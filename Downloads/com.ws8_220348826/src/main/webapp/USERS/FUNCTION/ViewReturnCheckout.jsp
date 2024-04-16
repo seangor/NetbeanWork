@@ -25,6 +25,7 @@
 
         <%
         ArrayList<RecordBean> rbs = (ArrayList<RecordBean>) request.getAttribute("CheckOutList");
+        session.setAttribute("Returnequipments", rbs);
         %>
                
         你的歸還選項：
@@ -51,7 +52,8 @@
             </tr>
             <% } %>
         </table>
-        
+        <form action="<%= request.getContextPath()%>/handleEdit" method="get">
+            <%                        request.setAttribute("Ordertype", "return");%>
                         <label for="month">取件日期：</label>
                         <select id="month" name="month">
                             <% for (int i = 1; i <= 12; i++) {%>
@@ -75,6 +77,10 @@
                             <option value="<%= i%>"><%= String.format("%02d", i)%></option>
                             <% }%>
                         </select>(The opening hours is between 09:00-18:00)                        <br>
-
+                        <input type="hidden" name="Ordertype"  value="return" />
+                        <input type="hidden" name="action" value="add" />
+                         <input type="submit" value="確認" />
+</form>
+                        
                 </body>
 </html>
