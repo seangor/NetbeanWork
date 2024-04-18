@@ -4,35 +4,28 @@
  */
 package ict.servlet;
 
-import ict.bean.OrderBean;
-import ict.bean.OrderitemBean;
-import ict.db.OrderDB;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author sean3
  */
-@WebServlet(name = "HandleCourierOrder", urlPatterns = {"/HandleCourierOrder"})
-public class HandleCourierOrder extends HttpServlet {
-
-    private OrderDB orderdb;
+@WebServlet(name = "HandleLogin", urlPatterns = {"/HandleLogin"})
+public class HandleLogin extends HttpServlet {
 
     @Override
     public void init() {
         String dbUser = this.getServletContext().getInitParameter("dbUser");
         String dbPassword = this.getServletContext().getInitParameter("dbPassword");
         String dbUrl = this.getServletContext().getInitParameter("dbUrl");
-
-        orderdb = new OrderDB(dbUrl, dbUser, dbPassword);
 
     }
 
@@ -55,22 +48,20 @@ public class HandleCourierOrder extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         String action = request.getParameter("action");
-        if ("CourierOrder".equalsIgnoreCase(action)) {
-            ArrayList<OrderBean> obs = orderdb.queryOrderByStatus("1");
-            request.setAttribute("OrderList", obs);
+        if ("User".equalsIgnoreCase(action)) {
+            HttpSession session = request.getSession();
+            session.setAttribute("Account", "User");
             RequestDispatcher rd;
-            rd = getServletContext().getRequestDispatcher("/COURIER/FUNCTION/ViewOrder.jsp");
+            rd = getServletContext().getRequestDispatcher("/USERS/User.jsp");
             rd.forward(request, response);
-        } else if ("Courierdeliver".equalsIgnoreCase(action)) {
-            ArrayList<OrderBean> obs = orderdb.queryOrderByStatus("2");
-            ArrayList<OrderBean> ob2 = orderdb.queryOrderByStatus("3");
-            ArrayList<OrderBean> combinedList = new ArrayList<>();
-            combinedList.addAll(obs);
-            combinedList.addAll(ob2);
-            request.setAttribute("OrderList", combinedList);
+        } else if ("Technician".equalsIgnoreCase(action)) {
+         HttpSession session = request.getSession();
+            session.setAttribute("Account", "Technician");
             RequestDispatcher rd;
-            rd = getServletContext().getRequestDispatcher("/COURIER/FUNCTION/ViewDelivery.jsp");
+            rd = getServletContext().getRequestDispatcher("/TECHNICIAN/Technician.jsp");
             rd.forward(request, response);
         }
+
     }
+
 }

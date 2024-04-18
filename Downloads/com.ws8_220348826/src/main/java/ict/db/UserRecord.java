@@ -48,7 +48,7 @@ public class UserRecord {
         boolean isSuccess = false;
         try {
             cnnct = getConnection();
-            String preQueryStatement = "INSERT INTO BorrowRecord (eid, uid, borrowDate,deadline) VALUES (?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 3 DAY))";
+            String preQueryStatement = "INSERT INTO BorrowRecord (eid, uid, borrowDate,deadline, status) VALUES (?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 7 DAY), '1')";
             pStmnt = cnnct.prepareStatement(preQueryStatement);
             pStmnt.setInt(1, eid);
             pStmnt.setInt(2, uid);
@@ -121,18 +121,18 @@ public class UserRecord {
         }
         return null;
     }
-    
-        public RecordBean queryBRecById(int bid) {
-                    Connection cnnct = null;
+
+    public RecordBean queryBRecById(int bid) {
+        Connection cnnct = null;
         PreparedStatement pStmnt = null;
         try {
             cnnct = getConnection();
             String preQueryStatement = "SELECT bid, borrowrecord.eid, ename, borrowdate, deadline, borrowRecord.status, equipment.imgsrc FROM borrowRecord "
                     + "INNER JOIN equipment ON borrowRecord.eid = equipment.eid WHERE bid = ? ORDER BY bid ASC";
             pStmnt = cnnct.prepareStatement(preQueryStatement);
-            pStmnt.setInt(1,bid);
+            pStmnt.setInt(1, bid);
             ResultSet rs = pStmnt.executeQuery();
-                RecordBean rb = new RecordBean();
+            RecordBean rb = new RecordBean();
 
             while (rs.next()) {
                 rb.setBid(rs.getInt(1));
@@ -160,9 +160,8 @@ public class UserRecord {
             }
         }
         return null;
-        }
+    }
 
-    
     public void UpdateFinishStatus(int bid) {
         Connection cnnct = null;
         PreparedStatement pStmnt = null;
@@ -172,6 +171,40 @@ public class UserRecord {
             String preQueryStatement = "UPDATE borrowrecord SET status = \"Returning\" WHERE bid = ?";
             pStmnt = cnnct.prepareStatement(preQueryStatement);
             pStmnt.setInt(1, bid);
+            int rowCount = pStmnt.executeUpdate();
+
+            if (rowCount > 0) {
+                isSuccess = true;
+            }
+            pStmnt.close();
+            cnnct.close();
+
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (cnnct != null) {
+                try {
+                    cnnct.close();
+                } catch (SQLException sqlEx) {
+                }
+            }
+        }
+    }
+
+    public void UpdateCheckStatus(int ebid) {
+        Connection cnnct = null;
+        PreparedStatement pStmnt = null;
+        boolean isSuccess;
+        try {
+            cnnct = getConnection();
+            String preQueryStatement = "UPDATE borrowrecord SET status = 'Checking' WHERE bid = ?";
+            pStmnt = cnnct.prepareStatement(preQueryStatement);
+            pStmnt.setInt(1, ebid);
             int rowCount = pStmnt.executeUpdate();
 
             if (rowCount > 0) {
@@ -242,4 +275,42 @@ public class UserRecord {
         return null;
     }
 
+    
+        public int getIdByFlag() {
+        Connection cnnct = null;
+        PreparedStatement pStmnt = null;
+        boolean isSuccess = false;
+        int bid = 0;
+
+        try {
+            cnnct = getConnection();
+            String preQueryStatement = "SELECT bid FROM borrowrecord WHERE ID_Flag = 'X'";
+            pStmnt = cnnct.prepareStatement(preQueryStatement);
+
+            ResultSet resultSet = pStmnt.executeQuery();
+
+            if (resultSet.next()) {
+                bid = resultSet.getInt("bid");
+            }
+
+            pStmnt.close();
+            cnnct.close();
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (cnnct != null) {
+                try {
+                    cnnct.close();
+                } catch (SQLException sqlEx) {
+                }
+            }
+        }
+        return bid;
+    }
 }
+//UPDATE eqorder SET Status = "delivering" WHERE OrderId = 43

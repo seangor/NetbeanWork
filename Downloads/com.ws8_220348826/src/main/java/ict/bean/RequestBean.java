@@ -5,40 +5,29 @@
 package ict.bean;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  *
  * @author sean3
  */
-public class OrderBean implements Serializable {
+public class RequestBean implements Serializable {
 
     private String delivertime;
     private String deliverdate;
     private int uid;
-    private int orderId;
     private String status;
     private String createdTime;
-    private String tel;
-    private String type;
+    private int requestId;
 
-    public String getType() {
-        return type;
+    public RequestBean() {
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public int getRequestId() {
+        return requestId;
     }
 
-    public String getTel() {
-        return tel;
-    }
-
-    public void setTel(String tel) {
-        this.tel = tel;
-    }
-
-    public OrderBean() {
+    public void setRequestId(int requestId) {
+        this.requestId = requestId;
     }
 
     public String getDelivertime() {
@@ -63,14 +52,6 @@ public class OrderBean implements Serializable {
 
     public void setUid(int uid) {
         this.uid = uid;
-    }
-
-    public int getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
     }
 
     public String getStatus() {

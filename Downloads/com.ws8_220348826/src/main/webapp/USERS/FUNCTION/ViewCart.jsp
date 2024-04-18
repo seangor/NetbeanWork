@@ -50,7 +50,6 @@
                 <tr>
                     <td>
                         <input type="hidden" name="action"  value="add" />
-                        <input type="hidden" name="Ordertype"  value="borrow" />
                     </td></tr>
                 <tr><td>
                         取件日期 & 時間： <br>

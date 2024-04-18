@@ -5,8 +5,8 @@
 package ict.servlet;
 
 import ict.bean.OrderBean;
-import ict.bean.OrderitemBean;
-import ict.db.OrderDB;
+import ict.bean.RequestBean;
+import ict.db.RequestDB;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -16,15 +16,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author sean3
  */
-@WebServlet(name = "HandleCourierOrder", urlPatterns = {"/HandleCourierOrder"})
-public class HandleCourierOrder extends HttpServlet {
+@WebServlet(name = "HandleRequest", urlPatterns = {"/HandleRequest"})
+public class HandleRequest extends HttpServlet {
 
-    private OrderDB orderdb;
+    private RequestDB requestdb;
 
     @Override
     public void init() {
@@ -32,8 +33,7 @@ public class HandleCourierOrder extends HttpServlet {
         String dbPassword = this.getServletContext().getInitParameter("dbPassword");
         String dbUrl = this.getServletContext().getInitParameter("dbUrl");
 
-        orderdb = new OrderDB(dbUrl, dbUser, dbPassword);
-
+        requestdb = new RequestDB(dbUrl, dbUser, dbPassword);
     }
 
     @Override
@@ -53,24 +53,22 @@ public class HandleCourierOrder extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
         String action = request.getParameter("action");
-        if ("CourierOrder".equalsIgnoreCase(action)) {
-            ArrayList<OrderBean> obs = orderdb.queryOrderByStatus("1");
-            request.setAttribute("OrderList", obs);
+        if ("list".equalsIgnoreCase(action)) {
+            HttpSession session = request.getSession();
+            ArrayList<RequestBean> obs = new ArrayList<RequestBean>();
+            if (((String) session.getAttribute("Account")).equals("User")) {
+                obs = requestdb.queryRequestByUid(1);
+            } else if (((String) session.getAttribute("Account")).equals("Technician")) {
+                obs = requestdb.queryRequest();
+            }
+            request.setAttribute("RequestList", obs);
             RequestDispatcher rd;
-            rd = getServletContext().getRequestDispatcher("/COURIER/FUNCTION/ViewOrder.jsp");
-            rd.forward(request, response);
-        } else if ("Courierdeliver".equalsIgnoreCase(action)) {
-            ArrayList<OrderBean> obs = orderdb.queryOrderByStatus("2");
-            ArrayList<OrderBean> ob2 = orderdb.queryOrderByStatus("3");
-            ArrayList<OrderBean> combinedList = new ArrayList<>();
-            combinedList.addAll(obs);
-            combinedList.addAll(ob2);
-            request.setAttribute("OrderList", combinedList);
-            RequestDispatcher rd;
-            rd = getServletContext().getRequestDispatcher("/COURIER/FUNCTION/ViewDelivery.jsp");
+            rd = getServletContext().getRequestDispatcher("/ViewRequest.jsp");
+
             rd.forward(request, response);
         }
     }
+
+    
 }

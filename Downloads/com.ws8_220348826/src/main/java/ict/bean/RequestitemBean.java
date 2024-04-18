@@ -4,14 +4,25 @@
  */
 package ict.bean;
 
-import java.io.Serializable;
+/**
+ *
+ * @author sean3
+ */
+public class RequestitemBean {
 
-public class OrderitemBean implements Serializable {
     private int eid;
-    private int orderid;
+    private int requestid;
     private String imgsrc;
     private String ename;
     private int ebid;
+
+    public int getRequestid() {
+        return requestid;
+    }
+
+    public void setRequestid(int requestid) {
+        this.requestid = requestid;
+    }
 
     public int getEbid() {
         return ebid;
@@ -21,23 +32,15 @@ public class OrderitemBean implements Serializable {
         this.ebid = ebid;
     }
 
-    
-        public OrderitemBean() {
+    public RequestitemBean() {
     }
+
     public int getEid() {
         return eid;
     }
 
     public void setEid(int eid) {
         this.eid = eid;
-    }
-
-    public int getOrderid() {
-        return orderid; 
-    }
-
-    public void setOrderid(int orderid) {
-        this.orderid = orderid;
     }
 
     public String getImgsrc() {

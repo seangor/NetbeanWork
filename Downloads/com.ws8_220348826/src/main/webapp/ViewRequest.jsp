@@ -1,10 +1,10 @@
 <%-- 
-    Document   : ViewOrder
-    Created on : 14 Apr 2024, 3:11:11 am
+    Document   : ViewRequest
+    Created on : 17 Apr 2024, 3:14:56 am
     Author     : sean3
 --%>
 
-<%@page import="ict.bean.OrderBean"%>
+<%@page import="ict.bean.RequestBean"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
  <%@ taglib uri="/WEB-INF/tlds/showStatus" prefix="ict" %>
@@ -16,38 +16,36 @@
         <title>JSP Page</title>
     </head>
     <body>
-                                             <a href="<%= request.getContextPath()%>/index.jsp">返回Index</a>
+                                         <a href="<%= request.getContextPath()%>/index.jsp">返回Index</a>
 
         <%
-            ArrayList<OrderBean> eqs = (ArrayList<OrderBean>) request.getAttribute("OrderList");
+            ArrayList<RequestBean> eqs = (ArrayList<RequestBean>) request.getAttribute("RequestList");
             String action = request.getParameter("action");
         %> 
         <h1>查看訂單</h1>
         <table border='1' >
             <tr>
-                <th>ID</th><th>送貨日期</th><th>送貨時間</th><th>訂單創建日期</th><th>狀態</th><th>聯繫電話</th><th>查看細節</th>
+                <th>ID</th><th>送貨日期</th><th>送貨時間</th><th>訂單創建日期</th><th>狀態</th><th>查看細節</th>
             </tr>
             <%                         for (int i = 0; i < eqs.size(); i++) {
-                    OrderBean c = eqs.get(i);
+                    RequestBean c = eqs.get(i);
             %> 
             <tr>
-                <td><%=c.getOrderId()%></td>
+                <td><%=c.getRequestId()%></td>
                 <td><%=c.getDeliverdate()%></td>
                 <td><%=c.getDelivertime()%></td>
                 <td><%=c.getCreatedTime()%></td>
-                <td><ict:showStatus item="order" status="<%=c.getStatus()%>" /></td>
-                <td><%=c.getTel()%></td>
+                <td><ict:showStatus item="request" status="<%=c.getStatus()%>" /></td>
 
-                <td><form action="<%=request.getContextPath()%>/HandleOrderItem">
+                <td><form action="<%=request.getContextPath()%>/HandleRequestItem">
                         <%if (action.equalsIgnoreCase("approvelist")) {%>
                         <input type="hidden" name="action" value="approvelist" >
                         <% } else if (action.equalsIgnoreCase("list")) {%>
                         <input type="hidden" name="action" value="list" >
                         <% }%>
-                        <input type="hidden" name="orderid" value="<%=c.getOrderId()%>" >
+                        <input type="hidden" name="requestid" value="<%=c.getRequestId()%>" >
                         <input type="submit" value="查看細節" style="background:none!important; border:none; padding:0!important; color:blue; text-decoration:underline; cursor:pointer;"></form></td>
             </tr>
             <% }%>
-        </table>
-    </body>
+        </table>    </body>
 </html>

@@ -6,7 +6,6 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.ArrayList, ict.bean.RecordBean"%>
-<%@taglib uri="/WEB-INF/tlds/showEquipment.tld" prefix="ict" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -14,7 +13,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-                <a href="<%= request.getContextPath()%>/index.jsp">返回Index</a>
+        <a href="<%= request.getContextPath()%>/index.jsp">返回Index</a>
         <a href="<%= request.getContextPath()%>/HandleEquipment?action=list">View Equipment</a>
         <a href="<%= request.getContextPath()%>/HandleOrder?action=list">View Order</a>
         <a href="<%= request.getContextPath()%>/HandleBorrowRecord?action=Recordlist">View Record</a>
@@ -36,6 +35,7 @@
                 <%
                     ArrayList<RecordBean> Record = (ArrayList<RecordBean>) request.getAttribute("BRecord");
                     ArrayList<RecordBean> rbs = Record;
+                    String action = request.getParameter("action");
                     for (int i = 0; i < rbs.size(); i++) {
                         RecordBean c = rbs.get(i);
                 %>
@@ -46,11 +46,18 @@
                     <td><%= c.getBorrowDate()%></td>
                     <td><%= c.getDeadline()%></td>
                     <td><%= c.getStatus()%></td>
-                    <td><input type="checkbox" name="selectedEq" onclick="toggleButton()" value="<%= c.getBid()%>" />歸還</td>
-                </tr>
+                    <td><input type="checkbox" name="selectedEq" onclick="toggleButton()" value="<%= c.getBid()%>" />
+                        <% if  (action.equalsIgnoreCase("Recordlist")) {%>
+                        歸還
+                        <%} else if (action.equalsIgnoreCase("checkReturn")) {%>
+                        確認收到
+                        <%}%>
+                    </td>
+                </tr>        
                 <% }%>
             </table>
             <br>
+
             <input name="action" type="hidden" value="checkout" />
 
             <input id="submitButton" type="submit" value="確認" disabled />

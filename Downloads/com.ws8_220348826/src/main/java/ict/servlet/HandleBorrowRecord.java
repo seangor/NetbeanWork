@@ -77,6 +77,13 @@ public class HandleBorrowRecord extends HttpServlet {
             rd = getServletContext().getRequestDispatcher("/USERS/FUNCTION/ViewReturnCheckout.jsp");
             rd.forward(request, response);
         }
+        else if ("checkReturn".equalsIgnoreCase(action)) {
+             ArrayList<RecordBean> rbs = Udb.queryBRec();
+            request.setAttribute("BRecord", rbs);
+            RequestDispatcher rd;
+            rd = getServletContext().getRequestDispatcher("/USERS/FUNCTION/ViewRecord.jsp");
+            rd.forward(request, response);
+        }
 
     }
 

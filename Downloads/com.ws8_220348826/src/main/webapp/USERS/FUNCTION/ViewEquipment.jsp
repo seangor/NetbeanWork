@@ -5,7 +5,6 @@
 --%>
 <%@page import="java.util.ArrayList, ict.bean.EquipmentBean"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib uri="/WEB-INF/tlds/showEquipment.tld" prefix="ict" %>
 <!DOCTYPE html>
 <html>
     <head>

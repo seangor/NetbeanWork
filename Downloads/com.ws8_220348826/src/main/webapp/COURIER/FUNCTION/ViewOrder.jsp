@@ -7,6 +7,8 @@
 <%@page import="ict.bean.OrderBean"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+ <%@ taglib uri="/WEB-INF/tlds/showStatus" prefix="ict" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -35,7 +37,7 @@
                 <td><%=c.getDeliverdate()%></td>
                 <td><%=c.getDelivertime()%></td>
                 <td><%=c.getCreatedTime()%></td>
-                <td><%=c.getStatus()%></td>
+                <td><ict:showStatus item="order" status="<%=c.getStatus()%>" /></td>
                 <td><form action="<%=request.getContextPath()%>/HandleStatus">
                         <input type="hidden" name="action" value="UpDeliver" >
                         <input type="hidden" name="orderid" value="<%=c.getOrderId()%>" >

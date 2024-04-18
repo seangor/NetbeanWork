@@ -53,7 +53,6 @@
             <% } %>
         </table>
         <form action="<%= request.getContextPath()%>/handleEdit" method="get">
-            <%                        request.setAttribute("Ordertype", "return");%>
                         <label for="month">取件日期：</label>
                         <select id="month" name="month">
                             <% for (int i = 1; i <= 12; i++) {%>

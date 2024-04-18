@@ -64,7 +64,6 @@ public class HandleOrder extends HttpServlet {
             request.setAttribute("OrderList", obs);
             RequestDispatcher rd;
             rd = getServletContext().getRequestDispatcher("/ViewOrder.jsp");
-            
             rd.forward(request, response);
         } 
     }
