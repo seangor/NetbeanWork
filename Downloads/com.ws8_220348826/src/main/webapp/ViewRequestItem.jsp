@@ -4,10 +4,13 @@
     Author     : sean3
 --%>
 
+<%@page import="ict.bean.EquipmentBean"%>
 <%@page import="ict.bean.RequestBean"%>
 <%@page import="ict.bean.RequestitemBean"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+ <%@ taglib uri="/WEB-INF/tlds/showStatus" prefix="ict" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,17 +18,23 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <a href="<%= request.getContextPath()%>/index.jsp">返回Index</a>
+                       <jsp:include page="/WEB-INF/header.jsp"  />
 
         <%
             ArrayList<RequestitemBean> eqs = (ArrayList<RequestitemBean>) request.getAttribute("RequestItemList");
+            ArrayList<EquipmentBean> equipmentlist = (ArrayList<EquipmentBean>) request.getAttribute("Equipments");
+
             RequestBean BorrowRequest = (RequestBean) request.getAttribute("BorrowRequest");
             String userType = (String) session.getAttribute("Account");
         %> 
-        <h1>查看訂單物品</h1>
-        <span>Order ID: <%=eqs.get(0).getRequestid()%></span><br>
+        <jsp:useBean class="ict.bean.RequestBean" id="Br" scope="page" />
+        <jsp:setProperty name="Br" property="requestId"  value="<%=BorrowRequest.getRequestId()%>" />
+
+        <h1>View Request</h1>
+        <span>Request ID: <jsp:getProperty name="Br" property="requestId" /></span><br>
         <span>Campus: LWL</span> <br>
         <span>User: Him</span><br>
+        <span>Status:         <ict:showStatus item="request" status="<%=BorrowRequest.getStatus()%>" /></span><br>
         <table border='1' >
             <tr>
                 <th>ID</th><th>eid</th>
@@ -53,5 +62,9 @@
         <input type="submit" value="已批准" disabled/>
 
         <%}
-                            }%>    </body>
+            }%> 
+        <% if (userType.equalsIgnoreCase("Technician")) {%>
+        <jsp:include page="${request.getContextPath()}/WEB-INF/CheckEquipments.jsp"  />
+        <%}%>
+    </body>
 </html>

@@ -9,7 +9,7 @@
     <body>
         <a href="HandleLogin?action=User">User</a>
         <a href="HandleLogin?action=Technician">Technician</a>
-        <a href="COURIER/Courier.jsp">Courier</a><br><!-- comment -->
+        <a href="HandleLogin?action=Courier">Courier</a><br><!-- comment -->
                 <a href="Technician_Administrator/Technician_Administrator.jsp">Technician (Administrator)</a>
 
 

@@ -35,7 +35,7 @@ public class HandleBorrowRecord extends HttpServlet {
         String dbUrl = this.getServletContext().getInitParameter("dbUrl");
 
         Udb = new UserRecord(dbUrl, dbUser, dbPassword);
-
+        Edb = new EquipmentDB(dbUrl, dbUser, dbPassword);
     }
 
     @Override
@@ -63,9 +63,8 @@ public class HandleBorrowRecord extends HttpServlet {
             RequestDispatcher rd;
             rd = getServletContext().getRequestDispatcher("/USERS/FUNCTION/ViewRecord.jsp");
             rd.forward(request, response);
-        }  else if ("checkout".equalsIgnoreCase(action)) {
+        } else if ("checkout".equalsIgnoreCase(action)) {
             ArrayList<RecordBean> rbs = new ArrayList<RecordBean>();
-
             String[] bidlength = request.getParameterValues("selectedEq");
             for (int i = 0; i < bidlength.length; i++) {
                 int bid = Integer.parseInt(bidlength[i]);
@@ -76,10 +75,23 @@ public class HandleBorrowRecord extends HttpServlet {
             RequestDispatcher rd;
             rd = getServletContext().getRequestDispatcher("/USERS/FUNCTION/ViewReturnCheckout.jsp");
             rd.forward(request, response);
-        }
-        else if ("checkReturn".equalsIgnoreCase(action)) {
-             ArrayList<RecordBean> rbs = Udb.queryBRec();
-            request.setAttribute("BRecord", rbs);
+        } else if ("checkReturn".equalsIgnoreCase(action)) {
+
+            String status3 = "3";
+            String status4 = "4";
+            String status5 = "5";
+
+            ArrayList<RecordBean> rbs3 = (ArrayList<RecordBean>) Udb.queryBRecByStatus(status3);
+            ArrayList<RecordBean> rbs4 = (ArrayList<RecordBean>) Udb.queryBRecByStatus(status4);
+            ArrayList<RecordBean> rbs5 = (ArrayList<RecordBean>) Udb.queryBRecByStatus(status5);
+
+            ArrayList<RecordBean> combinedList = new ArrayList<>();
+            combinedList.addAll(rbs3);
+            combinedList.addAll(rbs4);
+            combinedList.addAll(rbs5);
+
+            request.setAttribute("BRecord", combinedList);
+
             RequestDispatcher rd;
             rd = getServletContext().getRequestDispatcher("/USERS/FUNCTION/ViewRecord.jsp");
             rd.forward(request, response);

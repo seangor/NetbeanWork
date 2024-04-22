@@ -7,23 +7,24 @@ package ict.bean;
 import java.io.Serializable;
 
 public class OrderitemBean implements Serializable {
+
     private int eid;
     private int orderid;
     private String imgsrc;
     private String ename;
-    private int ebid;
+    private int bid;
 
-    public int getEbid() {
-        return ebid;
+    public int getBid() {
+        return bid;
     }
 
-    public void setEbid(int ebid) {
-        this.ebid = ebid;
+    public void setBid(int bid) {
+        this.bid = bid;
     }
 
-    
-        public OrderitemBean() {
+    public OrderitemBean() {
     }
+
     public int getEid() {
         return eid;
     }
@@ -33,7 +34,7 @@ public class OrderitemBean implements Serializable {
     }
 
     public int getOrderid() {
-        return orderid; 
+        return orderid;
     }
 
     public void setOrderid(int orderid) {

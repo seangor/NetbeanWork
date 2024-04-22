@@ -16,10 +16,8 @@
         <title>JSP Page</title>
     </head>
     <body>
-                                             <a href="<%= request.getContextPath()%>/index.jsp">返回Index</a>
-    
-        <a href="<%=request.getContextPath() %>/HandleCourierOrder?action=CourierOrder">View Order</a>
-                <a href="<%=request.getContextPath() %>/HandleCourierOrder?action=Courierdeliver">your Delivery</a>
+                       <jsp:include page="/WEB-INF/header.jsp"  />
+
         <%
             ArrayList<OrderBean> eqs = (ArrayList<OrderBean>) request.getAttribute("OrderList");
 

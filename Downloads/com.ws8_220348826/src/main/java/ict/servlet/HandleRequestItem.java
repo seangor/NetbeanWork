@@ -4,8 +4,10 @@
  */
 package ict.servlet;
 
+import ict.bean.EquipmentBean;
 import ict.bean.RequestBean;
 import ict.bean.RequestitemBean;
+import ict.db.EquipmentDB;
 import ict.db.RequestDB;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,6 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 public class HandleRequestItem extends HttpServlet {
 
     private RequestDB requestdb;
+        private EquipmentDB Edb;
+
 
     @Override
     public void init() {
@@ -33,7 +37,7 @@ public class HandleRequestItem extends HttpServlet {
         String dbUrl = this.getServletContext().getInitParameter("dbUrl");
 
         requestdb = new RequestDB(dbUrl, dbUser, dbPassword);
-
+        Edb = new EquipmentDB(dbUrl, dbUser, dbPassword);
     }
 
     @Override
@@ -61,6 +65,12 @@ public class HandleRequestItem extends HttpServlet {
             request.setAttribute("RequestItemList", obs);
             RequestBean ob = requestdb.queryRequestById(requestid);
             request.setAttribute("BorrowRequest", ob);
+            ArrayList<EquipmentBean> Equipments = new ArrayList<EquipmentBean>();
+            for (RequestitemBean rib : obs) {
+              EquipmentBean eb = Edb.queryEqById(rib.getEid());
+              Equipments.add(eb);
+            }
+            request.setAttribute("Equipments", Equipments);
             RequestDispatcher rd;
             rd = getServletContext().getRequestDispatcher("/ViewRequestItem.jsp");
             rd.forward(request, response);

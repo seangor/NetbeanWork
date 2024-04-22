@@ -171,7 +171,7 @@ public class RequestDB {
         boolean isSuccess = false;
         try {
             cnnct = getConnection();
-            String status = "Progress";
+            String status = "1";
             String preQueryStatement = "INSERT INTO Request (uid, DeliveryDate, deliveryTime, status, CreatedDate, ID_Flag) VALUES (?, ?, ?, ?, NOW(), 'X')";
             pStmnt = cnnct.prepareStatement(preQueryStatement);
             pStmnt.setInt(1, uid);

@@ -35,6 +35,7 @@ public class HandleStatus extends HttpServlet {
     private UserRecord brdb;
     private OrderDB order_db;
     private RequestDB requestdb;
+    private EquipmentDB Eqdb;
 
     @Override
     public void init() {
@@ -45,6 +46,7 @@ public class HandleStatus extends HttpServlet {
         order_db = new OrderDB(dbUrl, dbUser, dbPassword);
         requestdb = new RequestDB(dbUrl, dbUser, dbPassword);
         brdb = new UserRecord(dbUrl, dbUser, dbPassword);
+        Eqdb = new EquipmentDB(dbUrl, dbUser, dbPassword);
     }
 
     @Override
@@ -74,17 +76,26 @@ public class HandleStatus extends HttpServlet {
             order_db.finishDelivery(orderid);
             ArrayList<OrderitemBean> obs = order_db.queryItemById(orderid);
             OrderBean ob = order_db.queryOrderById(orderid);
-            if (ob.getType().equalsIgnoreCase("borrow")) {
+            if (ob.getType().equalsIgnoreCase("1")) {
                 for (OrderitemBean oib : obs) {
                     int eid = oib.getEid();
-                    brdb.addBRecord(1, eid);
                 }
                 response.sendRedirect(request.getContextPath() + "/HandleCourierOrder?action=Courierdeliver");
-
-            } else if (ob.getType().equalsIgnoreCase("return")) {
+            } else if (ob.getType().equalsIgnoreCase("2")) {
+                order_db.finishDelivery(orderid);
                 for (OrderitemBean oib : obs) {
-                    int ebid = oib.getEbid();
-                    brdb.UpdateCheckStatus(ebid);
+                    int bid = oib.getBid();
+                    int eid = oib.getEid();
+
+                    brdb.UpdateStatus("3", bid);
+
+//                    EquipmentBean eq = Eqdb.queryEqById(eid);
+//                    int Eqquantity = eq.getQuantity();
+//                    int EqEid = eq.getEid();
+
+//
+//                    Eqdb.returnEquipmentQty(Eqquantity, oib.getEid());
+//                    Eqdb.checkStatus(Eqquantity, EqEid);
                 }
                 response.sendRedirect(request.getContextPath() + "/HandleCourierOrder?action=Courierdeliver");
             }

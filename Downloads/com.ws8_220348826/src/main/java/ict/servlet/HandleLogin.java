@@ -60,7 +60,14 @@ public class HandleLogin extends HttpServlet {
             RequestDispatcher rd;
             rd = getServletContext().getRequestDispatcher("/TECHNICIAN/Technician.jsp");
             rd.forward(request, response);
+        }else if ("Courier".equalsIgnoreCase(action)) {
+         HttpSession session = request.getSession();
+            session.setAttribute("Account", "Courier");
+            RequestDispatcher rd;
+            rd = getServletContext().getRequestDispatcher("/COURIER/Courier.jsp");
+            rd.forward(request, response);
         }
+        
 
     }
 

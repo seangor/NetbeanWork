@@ -16,13 +16,13 @@
         <title>JSP Page</title>
     </head>
     <body>
-                                         <a href="<%= request.getContextPath()%>/index.jsp">返回Index</a>
+                       <jsp:include page="/WEB-INF/header.jsp"  />
 
         <%
             ArrayList<RequestBean> eqs = (ArrayList<RequestBean>) request.getAttribute("RequestList");
             String action = request.getParameter("action");
         %> 
-        <h1>查看訂單</h1>
+        <h1>View Request</h1>
         <table border='1' >
             <tr>
                 <th>ID</th><th>送貨日期</th><th>送貨時間</th><th>訂單創建日期</th><th>狀態</th><th>查看細節</th>
@@ -47,5 +47,8 @@
                         <input type="submit" value="查看細節" style="background:none!important; border:none; padding:0!important; color:blue; text-decoration:underline; cursor:pointer;"></form></td>
             </tr>
             <% }%>
-        </table>    </body>
+            
+
+        </table>    
+    </body>
 </html>

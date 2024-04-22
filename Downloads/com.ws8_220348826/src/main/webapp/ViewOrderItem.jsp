@@ -15,15 +15,21 @@
         <title>JSP Page</title>
     </head>
     <body>
-                                                     <a href="<%= request.getContextPath()%>/index.jsp">返回Index</a>
+                       <jsp:include page="/WEB-INF/header.jsp"  />
 
         <%
             ArrayList<OrderitemBean> eqs = (ArrayList<OrderitemBean>) request.getAttribute("OrderItemList");
             String action = request.getParameter("action");
             OrderBean Order = (OrderBean) request.getAttribute("Order");
         %> 
+        <jsp:useBean class="ict.bean.OrderBean" id="or" scope="request" />
+        <jsp:setProperty name="or" property="orderId" value="<%=Order.getOrderId()%>" />
+
         <h1>查看訂單物品</h1>
-        <span>Order ID: <%=eqs.get(0).getOrderid()%></span><br>
+        <span>Order ID: <jsp:getProperty name="or" property="orderId" /></span><br>
+        <span>Delivery Address: <jsp:getProperty name="or" property="orderId" /></span><br>
+        <span>Shipping Address: <jsp:getProperty name="or" property="orderId" /></span><br>
+
         <span>Campus: LWL</span> <br>
         <span>User: Him</span><br>
         <table border='1' >
@@ -41,18 +47,18 @@
             </tr>
             <% }%>
         </table> 
-             <% if (action.equalsIgnoreCase("approvelist")) {
-             if ( Order.getStatus().equalsIgnoreCase("In Progress")) {
-                 %>
-                    <form action="<%=request.getContextPath()%>/HandleStatus">
+        <% if (action.equalsIgnoreCase("approvelist")) {
+                if (Order.getStatus().equalsIgnoreCase("1")) {
+        %>
+        <form action="<%=request.getContextPath()%>/HandleStatus">
             <input type="hidden" name="action" value="UpApprove" />
-            <input type="hidden" name="orderid" value="<%=eqs.get(0).getOrderid()%>" />
+            <input type="hidden" name="orderid" value="<jsp:getProperty name="or" property="orderId" />" />
             <input type="submit" value="批准"/>
         </form>
-            <%} else { %>
-                        <input type="submit" value="已批准" disabled/>
+        <%} else { %>
+        <input type="submit" value="已批准" disabled/>
 
-                        <%}
+        <%}
                             }%>
     </body>
 </html>

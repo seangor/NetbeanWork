@@ -187,7 +187,7 @@ public class OrderDB {
         PreparedStatement pStmnt = null;
         try {
             cnnct = getConnection();
-            String query = "SELECT orderId, orderitem.eid, Imgsrc, EName, ebid from orderitem Inner JOIN equipment ON equipment.Eid = orderitem.eid WHERE orderId = ?";
+            String query = "SELECT orderId, orderitem.eid, Imgsrc, EName, orderitem.bid from orderitem Inner JOIN equipment ON equipment.Eid = orderitem.eid WHERE orderId = ?";
             pStmnt = cnnct.prepareStatement(query);
             pStmnt.setInt(1, orderid);
 
@@ -201,7 +201,7 @@ public class OrderDB {
                 ob.setEid(rs.getInt(2));
                 ob.setImgsrc(rs.getString(3));
                 ob.setEname(rs.getString(4));
-                ob.setEbid(rs.getInt(5));
+                ob.setBid(rs.getInt(5));
                 list.add(ob);
             }
             return list;
@@ -229,7 +229,7 @@ public class OrderDB {
         boolean isSuccess = false;
         try {
             cnnct = getConnection();
- 
+
             String preQueryStatement = "INSERT INTO eqorder (uid, DeliveryDate, DeliveryTime, ID_Flag, status, CreatedDate, type) VALUES (?, ?, ?, 'X', '1', NOW(), ?)";
             pStmnt = cnnct.prepareStatement(preQueryStatement);
             pStmnt.setInt(1, uid);
@@ -403,17 +403,18 @@ public class OrderDB {
         return isSuccess;
     }
 
-    public boolean addOrderItem(int orderid, int eid) {
+    public boolean addOrderItem(int orderid, int eid, int bid) {
         Connection cnnct = null;
         PreparedStatement pStmnt = null;
         boolean isSuccess = false;
         try {
             cnnct = getConnection();
-            String preQueryStatement = "INSERT INTO orderitem (OrderId, eid) VALUES (?, ?)";
+            String preQueryStatement = "INSERT INTO orderitem (OrderId, eid, bid) VALUES (?, ?, ?)";
             pStmnt = cnnct.prepareStatement(preQueryStatement);
 
             pStmnt.setInt(1, orderid);
             pStmnt.setInt(2, eid);
+            pStmnt.setInt(3, bid);
 
             int rowCount = pStmnt.executeUpdate();
 
@@ -439,8 +440,8 @@ public class OrderDB {
         }
         return isSuccess;
     }
-    
-        public boolean addReturnOrderItem(int orderid, int eid, int bid) {
+
+    public boolean addReturnOrderItem(int orderid, int eid, int bid) {
         Connection cnnct = null;
         PreparedStatement pStmnt = null;
         boolean isSuccess = false;

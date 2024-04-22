@@ -14,13 +14,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <a href="<%= request.getContextPath()%>/index.jsp">返回Index</a>
-        <a href="<%= request.getContextPath()%>/HandleEquipment?action=list">View Equipment</a>
-        <a href="<%= request.getContextPath()%>/HandleOrder?action=list">View Order</a>
-        <a href="<%= request.getContextPath()%>/HandleBorrowRecord?action=Recordlist">View Record</a>
-        <a href="FUNCTION/View_information.jsp">View personal Info & update password/Info</a>
-        <a href="<%= request.getContextPath()%>/HandleWishlist?action=notice">Notification</a>
-
+                       <jsp:include page="/WEB-INF/header.jsp"  />
 
         <h1>查看訂單</h1>
         <table border='1' >
@@ -50,6 +44,8 @@
                 <tr>
                     <td>
                         <input type="hidden" name="action"  value="add" />
+                        <input type="hidden" name="type"  value="1" />
+
                     </td></tr>
                 <tr><td>
                         取件日期 & 時間： <br>
@@ -77,7 +73,7 @@
                             <% }%>
                         </select>
             </table>    
-
+            <% %>
 
             <%if (!eqs.isEmpty()) {%>
             <input type="submit" value="confirm" />

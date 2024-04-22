@@ -58,6 +58,8 @@ public class HandleOrderItem extends HttpServlet {
         int orderid = Integer.parseInt(request.getParameter("orderid"));
         if ("list".equalsIgnoreCase(action)) {
             ArrayList<OrderitemBean> obs = orderdb.queryItemById(orderid);
+            OrderBean ob = orderdb.queryOrderById(orderid);
+            request.setAttribute("Order", ob);
             request.setAttribute("OrderItemList", obs);
             RequestDispatcher rd;
             rd = getServletContext().getRequestDispatcher("/ViewOrderItem.jsp");

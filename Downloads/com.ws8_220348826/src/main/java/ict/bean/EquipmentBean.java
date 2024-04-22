@@ -17,6 +17,33 @@ public class EquipmentBean implements Serializable{
     private int quantity;
     private int wid;
     private String imgsrc;
+    private int damagedQty;
+    private int totalQty;
+    private int borrowQty;
+
+    public int getBorrowQty() {
+        return borrowQty;
+    }
+
+    public void setBorrowQty(int borrowQty) {
+        this.borrowQty = borrowQty;
+    }
+
+    public int getDamagedQty() {
+        return damagedQty;
+    }
+
+    public void setDamagedQty(int damagedQty) {
+        this.damagedQty = damagedQty;
+    }
+
+    public int getTotalQty() {
+        return totalQty;
+    }
+
+    public void setTotalQty(int totalQty) {
+        this.totalQty = totalQty;
+    }
 
     public String getImgsrc() {
         return imgsrc;

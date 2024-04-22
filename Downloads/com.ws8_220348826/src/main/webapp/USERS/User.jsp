@@ -134,14 +134,8 @@
     </head>
 
     <body>
-        Account Type: <%=session.getAttribute("Account")%>
-        <a href="<%= request.getContextPath()%>/index.jsp">返回Index</a>
-                <a href="<%= request.getContextPath()%>/HandleRequest?action=list">View request</a>
-        <a href="<%= request.getContextPath()%>/HandleEquipment?action=list">View Equipment</a>
-        <a href="<%= request.getContextPath()%>/HandleOrder?action=list">View Order</a>
-        <a href="<%= request.getContextPath()%>/HandleBorrowRecord?action=Recordlist">View Record</a>
-        <a href="FUNCTION/View_information.jsp">View personal Info & update password/Info</a>
-        <a href="<%= request.getContextPath()%>/HandleWishlist?action=notice">Notification</a>
+                       <jsp:include page="/WEB-INF/header.jsp"  />
+
 
 
         <h2 class="section__title">Welcome, [Username]!</h2>

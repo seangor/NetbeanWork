@@ -44,7 +44,7 @@ public class StatusTag extends SimpleTagSupport {
                         exp = "Not Accepted";
                         break;
                 }
-            } else if  (item.equalsIgnoreCase("order")) {
+            } else if (item.equalsIgnoreCase("order")) {
                 switch (status) {
                     case "1":
                         exp = "Pending";
@@ -56,6 +56,23 @@ public class StatusTag extends SimpleTagSupport {
                         exp = "Received";
                         break;
                 }
+            } else if (item.equalsIgnoreCase("borrowRecord")) {
+                switch (status) {
+                    case "1":
+                        exp = "Possessing";
+                        break;
+                    case "2":
+                        exp = "Returning";
+                        break;
+                    case "3":
+                        exp = "Checking Status";
+                        break;
+                    case "4":
+                        exp = "Returned";
+                        break;
+                    case "5":
+                        exp = "Damaged";
+                        break;                }
             }
             out.println(exp);
         } catch (IOException e) {

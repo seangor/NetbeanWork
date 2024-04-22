@@ -42,7 +42,9 @@ public class EquipmentDB {
         PreparedStatement pStmnt = null;
         try {
             cnnct = getConnection();
-            String query = "SELECT e.Eid, e.EName, e.EStatus, e.Quantity, w.wid, e.imgsrc "
+            String query = "SELECT e.Eid, e.EName, e.EStatus, e.Quantity, w.wid, e.imgsrc, (SELECT COUNT(bid) FROM borrowrecord WHERE e.eid = borrowrecord.eid AND borrowrecord.status IN ('5')) AS damageQty,"
+                    + " TotalQty, "
+                    + "(SELECT COUNT(bid) FROM borrowrecord WHERE e.eid = borrowrecord.eid AND borrowrecord.status IN ('1', '2', '3')) AS BorrowedQty "
                     + "FROM Equipment e "
                     + "LEFT JOIN Wishlist w ON w.eid = e.Eid";
             pStmnt = cnnct.prepareStatement(query);
@@ -59,6 +61,10 @@ public class EquipmentDB {
                 eb.setQuantity(rs.getInt(4));
                 eb.setWid(rs.getInt(5));
                 eb.setImgsrc(rs.getString(6));
+                eb.setDamagedQty(rs.getInt(7));
+                eb.setTotalQty(rs.getInt(8));
+                eb.setBorrowQty(rs.getInt(9));
+
                 list.add(eb);
             }
             return list;
@@ -85,7 +91,11 @@ public class EquipmentDB {
         PreparedStatement pStmnt = null;
         try {
             cnnct = getConnection();
-            String preQueryStatement = "SELECT Eid, EName, EStatus, Quantity, imgsrc FROM Equipment WHERE eid = ?";
+String preQueryStatement = "SELECT Equipment.eid, EName, EStatus, Quantity, imgsrc, (SELECT COUNT(bid) FROM borrowrecord WHERE Equipment.eid = borrowrecord.eid AND borrowrecord.status IN ('1', '2', '3')) AS BorrowedQty, " +
+        " (SELECT COUNT(bid) FROM borrowrecord WHERE Equipment.eid = borrowrecord.eid AND borrowrecord.status IN ('5')) AS damageQty, " +
+        "TotalQty " +
+        "FROM Equipment " +
+        "WHERE Equipment.eid = ?";
             pStmnt = cnnct.prepareStatement(preQueryStatement);
             pStmnt.setInt(1, eid);
             ResultSet rs = pStmnt.executeQuery();
@@ -97,6 +107,11 @@ public class EquipmentDB {
                 eb.setEstatus(rs.getString(3));
                 eb.setQuantity(rs.getInt(4));
                 eb.setImgsrc(rs.getString(5));
+
+
+                eb.setBorrowQty(rs.getInt(6));
+                eb.setDamagedQty(rs.getInt(7));
+                eb.setTotalQty(rs.getInt(8));
             }
 
             return eb;
@@ -118,6 +133,10 @@ public class EquipmentDB {
         return null;
     }
 
+//SELECT Equipment.eid, EName, EStatus, Quantity, imgsrc, COUNT(CASE WHEN borrowrecord.status IN (1, 2, 3) THEN bid END) AS BorrowedQty, COUNT(CASE WHEN borrowrecord.status IN (5) THEN bid END) AS damageQty ,totalQty
+//FROM Equipment
+//INNER JOIN borrowrecord ON Equipment.eid = borrowrecord.eid
+//GROUP BY Equipment.eid;
     public ArrayList<EquipmentBean> queryEqByName(String name) {
         Connection cnnct = null;
         PreparedStatement pStmnt = null;
@@ -152,7 +171,7 @@ public class EquipmentDB {
         return eList;
     }
 
-    public boolean borrowEquipment(int count, int eid) {
+    public boolean borrowEquipmentQty(int count, int eid) {
         Connection cnnct = null;
         PreparedStatement pStmnt = null;
         boolean isSuccess = false;
@@ -160,6 +179,38 @@ public class EquipmentDB {
         if (count < 0) {
             return false;
         }
+        try {
+            cnnct = getConnection();
+            String preQueryStatement = "UPDATE Equipment SET Quantity = ? WHERE eid = ?";
+
+            pStmnt = cnnct.prepareStatement(preQueryStatement);
+            pStmnt.setInt(1, count);
+            pStmnt.setInt(2, eid);
+
+            int rowCount = pStmnt.executeUpdate();
+            if (rowCount > 0) {
+                isSuccess = true;
+            }
+            pStmnt.close();
+            cnnct.close();
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return isSuccess;
+    }
+
+    public boolean returnEquipmentQty(int count, int eid) {
+        Connection cnnct = null;
+        PreparedStatement pStmnt = null;
+        boolean isSuccess = false;
+        count += 1;
+
         try {
             cnnct = getConnection();
             String preQueryStatement = "UPDATE Equipment SET Quantity = ? WHERE eid = ?";

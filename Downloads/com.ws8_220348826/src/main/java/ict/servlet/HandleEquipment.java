@@ -74,7 +74,13 @@ public class HandleEquipment extends HttpServlet {
             RequestDispatcher rd;
             rd = getServletContext().getRequestDispatcher("/USERS/FUNCTION/ViewCart.jsp");
             rd.forward(request, response);
-        } else {
+        } else if ("listStatus".equalsIgnoreCase(action)) {
+            ArrayList<EquipmentBean> Equipments = Edb.queryEq();
+            request.setAttribute("Equipments", Equipments);
+            RequestDispatcher rd;
+            rd = getServletContext().getRequestDispatcher("/TECHNICIAN/FUNCTION/CheckEqStatus.jsp");
+            rd.forward(request, response);
+        }else {
             PrintWriter out = response.getWriter();
             out.println("No such action!!!");
         }

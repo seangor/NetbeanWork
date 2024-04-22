@@ -7,6 +7,8 @@
 <%@page import="ict.bean.RecordBean"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+ <%@ taglib uri="/WEB-INF/tlds/showStatus" prefix="ict" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,12 +17,8 @@
     </head>
     <body>
         
-                <a href="<%= request.getContextPath()%>/index.jsp">返回Index</a>
-        <a href="<%= request.getContextPath()%>/HandleEquipment?action=list">View Equipment</a>
-        <a href="<%= request.getContextPath()%>/HandleOrder?action=list">View Order</a>
-        <a href="<%= request.getContextPath()%>/HandleBorrowRecord?action=Recordlist">View Record</a>
-        <a href="FUNCTION/View_information.jsp">View personal Info & update password/Info</a>
-        <a href="<%= request.getContextPath()%>/HandleWishlist?action=notice">Notification</a>
+                       <jsp:include page="/WEB-INF/header.jsp"  />
+
 
 
         <%
@@ -48,7 +46,7 @@
                 <td><img src="img/<%= c.getImgsrc() %>" width="80" height="80"></td>
                 <td><%= c.getBorrowDate() %></td>
                 <td><%= c.getDeadline() %></td>
-                <td><%= c.getStatus() %></td>
+                <td><ict:showStatus item="borrowrecord" status="<%=c.getStatus()%>" /></td>
             </tr>
             <% } %>
         </table>
@@ -77,6 +75,7 @@
                             <% }%>
                         </select>(The opening hours is between 09:00-18:00)                        <br>
                         <input type="hidden" name="Ordertype"  value="return" />
+                        <input type="hidden" name="type"  value="2" />
                         <input type="hidden" name="action" value="add" />
                          <input type="submit" value="確認" />
 </form>

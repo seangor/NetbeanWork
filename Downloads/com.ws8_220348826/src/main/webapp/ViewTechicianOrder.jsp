@@ -14,7 +14,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-                                             <a href="<%= request.getContextPath()%>/index.jsp">返回Index</a>
+                       <jsp:include page="/WEB-INF/header.jsp"  />
 
         <%
             ArrayList<OrderBean> eqs = (ArrayList<OrderBean>) request.getAttribute("OrderList");
