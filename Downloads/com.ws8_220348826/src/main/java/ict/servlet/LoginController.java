@@ -61,7 +61,7 @@ public class LoginController extends HttpServlet {
             String identity = db.getUserIdentity(username, password); // 获取用户身份
             switch (identity) {
                 case "user":
-                    targetURL = "/USERS/User.jsp";
+                    targetURL = "/HandleLogin?action=User";
                     break;
                 case "Technician":
                     targetURL = "/TECHNICIAN/Technician.jsp";
