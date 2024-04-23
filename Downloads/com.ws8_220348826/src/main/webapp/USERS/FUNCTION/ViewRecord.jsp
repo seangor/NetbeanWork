@@ -120,5 +120,8 @@
                         }
                     }
                 </script>
+                <a href="USERS/User.jsp">Back to user</a>
+                        <jsp:include page="/WEB-INF/footer.jsp"  />
+
                 </body>
                 </html>
