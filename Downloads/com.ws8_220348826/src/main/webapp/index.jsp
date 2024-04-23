@@ -11,6 +11,7 @@
         <a href="HandleLogin?action=Technician">Technician</a>
         <a href="HandleLogin?action=Courier">Courier</a><br><!-- comment -->
                 <a href="Technician_Administrator/Technician_Administrator.jsp">Technician (Administrator)</a>
+        <a href="Login/Login.jsp">Login</a>    
 
 
 </a>
