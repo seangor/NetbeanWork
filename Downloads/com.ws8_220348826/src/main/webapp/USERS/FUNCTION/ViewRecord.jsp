@@ -119,7 +119,6 @@
                         }
                     }
                 </script>
-                <%= Record.get(2).getEname() %>
                 <a href="USERS/User.jsp">Back to user</a>
                 </body>
                 </html>
