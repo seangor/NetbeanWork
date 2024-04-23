@@ -40,7 +40,7 @@
                 text-align: left;
             }
             th {
-                background-color: #4CAF50;
+                background-color: #3445b4;
                 color: white;
             }
             tr:nth-child(even) {
@@ -71,10 +71,67 @@
                 height: 20px;
                 vertical-align: middle;
             }
+
+            .btn-1,
+            .btn-1 *,
+            .btn-1 :after,
+            .btn-1 :before,
+            .btn-1:after,
+            .btn-1:before {
+                border: 0 solid;
+                box-sizing: border-box;
+            }
+            .btn-1 {
+                -webkit-tap-highlight-color: transparent;
+                -webkit-appearance: button;
+                background-color: #000;
+                background-image: none;
+                color: #fff;
+                cursor: pointer;
+                font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+                    Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
+                    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+                font-size: 100%;
+                font-weight: 900;
+                line-height: 1.5;
+                margin: 0;
+                -webkit-mask-image: -webkit-radial-gradient(#000, #fff);
+                padding: 0;
+                text-transform: uppercase;
+                margin-top:20px;
+            }
+
+            .button-container {
+                display: flex;
+                justify-content: flex-end; /* 使子元素对齐到容器的右侧 */
+            }
+            .btn-1:disabled {
+                cursor: default;
+            }
+            .btn-1:-moz-focusring {
+                outline: auto;
+            }
+            .btn-1 svg {
+                display: block;
+                vertical-align: middle;
+            }
+            .btn-1 [hidden] {
+                display: none;
+            }
+            .btn-1 {
+                border-radius: 99rem;
+                border-width: 2px;
+                padding: 0.8rem 3rem;
+            }
+            .btn-1:hover {
+                color: #999;
+            }
+
+
         </style>
     </head>
     <body>
-                       <jsp:include page="/WEB-INF/header.jsp"  />
+        <jsp:include page="/WEB-INF/header.jsp"  />
 
 
 
@@ -87,10 +144,10 @@
                     </button>
                 </div>
                 <div class="p-4">
-                    <h1><a href="index.html" class="logo">Portfolic <span>Portfolio Agency</span></a></h1>
+                    <h1><a href="index.html" class="logo">Hello, Username <span>Role, Campus</span></a></h1>
                     <ul class="list-unstyled components mb-5">
                         <li class="active">
-                            <a href="#"><span class="fa fa-home mr-3"></span> AAAA</a>
+                            <a href="#"><span class="fa fa-eye mr-3"></span>View Equipment</a>
                         </li>
                         <li>
                             <a href="#"><span class="fa fa-user mr-3"></span> About</a>
@@ -145,8 +202,6 @@
                     }
 
                     out.println("<h1>查看裝置狀態</h1>");
-                    out.println("<a href=\"" + request.getContextPath() + "/USERS/FUNCTION/ViewCart.jsp\">查看預訂列表</a>");
-                     out.println("<a href=\"" + request.getContextPath() + "/USERS/User.jsp\">返回User</a>");
 
                     out.println("<table border='1' >");
                     out.println("<tr>");
@@ -190,6 +245,16 @@
                         out.println("</tr>");
                     }
                     out.println("</table>");
+
+                    out.println("<div class='button-container'>");  // 开始按钮容器
+                    out.println("<button class='btn-1' onclick='redirectToViewCart()'>查看預定列表</button>");  // 按钮
+                    out.println("</div>");  // 结束按钮容器
+                    out.println("<script>");
+                    out.println("function redirectToViewCart() {");
+                    out.println("    window.location.href = '" + request.getContextPath() + "/USERS/FUNCTION/ViewCart.jsp';");
+                    out.println("}");
+                    out.println("</script>");
+                    out.println("<a href=\"" + request.getContextPath() + "/USERS/User.jsp\">返回User</a>");  // 返回链接
                 %>
             </div>
         </div>
