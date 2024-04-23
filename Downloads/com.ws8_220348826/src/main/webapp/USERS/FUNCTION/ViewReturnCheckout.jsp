@@ -79,6 +79,7 @@
                         <input type="hidden" name="action" value="add" />
                          <input type="submit" value="確認" />
 </form>
-                        
+                                <jsp:include page="/WEB-INF/footer.jsp"  />
+
                 </body>
 </html>

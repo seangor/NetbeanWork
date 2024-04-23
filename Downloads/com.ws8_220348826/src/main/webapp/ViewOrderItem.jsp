@@ -34,7 +34,7 @@
         <span>User: Him</span><br>
         <table border='1' >
             <tr>
-                <th>ID</th><th>eid</th>
+                <th>ID</th><th>Image</th><th>Equipment</th>
             </tr>
             <%                         for (int i = 0; i < eqs.size(); i++) {
                     OrderitemBean c = eqs.get(i);
@@ -47,18 +47,8 @@
             </tr>
             <% }%>
         </table> 
-        <% if (action.equalsIgnoreCase("approvelist")) {
-                if (Order.getStatus().equalsIgnoreCase("1")) {
-        %>
-        <form action="<%=request.getContextPath()%>/HandleStatus">
-            <input type="hidden" name="action" value="UpApprove" />
-            <input type="hidden" name="orderid" value="<jsp:getProperty name="or" property="orderId" />" />
-            <input type="submit" value="批准"/>
-        </form>
-        <%} else { %>
-        <input type="submit" value="已批准" disabled/>
 
-        <%}
-                            }%>
+                                    <jsp:include page="/WEB-INF/footer.jsp"  />
+
     </body>
 </html>

@@ -21,6 +21,15 @@ public class EquipmentBean implements Serializable{
     private int totalQty;
     private int borrowQty;
     private String campus;
+    private int campusid;
+
+    public int getCampusid() {
+        return campusid;
+    }
+
+    public void setCampusid(int campusid) {
+        this.campusid = campusid;
+    }
 
     public String getCampus() {
         return campus;

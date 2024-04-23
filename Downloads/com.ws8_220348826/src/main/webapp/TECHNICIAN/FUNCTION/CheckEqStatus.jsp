@@ -17,6 +17,7 @@
         <h1>View Equipment Status</h1>
                <jsp:include page="${request.getContextPath()}/WEB-INF/CheckEquipments.jsp"  />
 
-        
+                <jsp:include page="/WEB-INF/footer.jsp"  />
+
     </body>
 </html>

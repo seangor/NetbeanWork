@@ -98,8 +98,9 @@
                     <input id="submitButton" type="submit" value="確認" disabled />
                 </form>
                     
-
-                <script>
+                <a href="USERS/User.jsp">Back to user</a>
+                        <jsp:include page="/WEB-INF/footer.jsp"  />
+               <script>
                     function toggleButton() {
                         var checkbox = document.getElementsByName('selectedEq');
                         var button = document.getElementById('submitButton');
@@ -119,6 +120,5 @@
                         }
                     }
                 </script>
-                <a href="USERS/User.jsp">Back to user</a>
                 </body>
                 </html>

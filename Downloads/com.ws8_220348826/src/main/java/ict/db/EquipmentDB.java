@@ -20,6 +20,11 @@ public class EquipmentDB {
     private String url = "";
     private String username = "";
     private String password = "";
+    private String stringquery = "SELECT e.Eid, e.EName, e.EStatus, equipmentstock.Stock, w.wid, e.imgsrc, "
+            + "(SELECT COUNT(bid) FROM borrowrecord WHERE e.eid = borrowrecord.eid AND borrowrecord.status IN ('5') And cid = 1) AS damageQty, "
+            + "equipmentstock.Quantity, "
+            + "(SELECT COUNT(bid) FROM borrowrecord WHERE e.eid = borrowrecord.eid AND borrowrecord.status IN ('1', '2', '3')) AS BorrowedQty, campus.name "
+            + "FROM Equipment e LEFT JOIN Wishlist w ON w.eid = e.Eid INNER JOIN equipmentstock ON equipmentstock.eid = e.Eid INNER JOIN campus ON campusid = equipmentstock.cid ORDER BY campus.name ASC, eid ASC";
 
     public EquipmentDB(String url, String username, String password) {
         this.url = url;
@@ -45,7 +50,7 @@ public class EquipmentDB {
             String query = "SELECT e.Eid, e.EName, e.EStatus, equipmentstock.Stock, w.wid, e.imgsrc, "
                     + "(SELECT COUNT(bid) FROM borrowrecord WHERE e.eid = borrowrecord.eid AND borrowrecord.status IN ('5') And cid = 1) AS damageQty, "
                     + "equipmentstock.Quantity, "
-                    + "(SELECT COUNT(bid) FROM borrowrecord WHERE e.eid = borrowrecord.eid AND borrowrecord.status IN ('1', '2', '3')) AS BorrowedQty, campus.name "
+                    + "(SELECT COUNT(bid) FROM borrowrecord WHERE e.eid = borrowrecord.eid AND borrowrecord.status IN ('1', '2', '3')) AS BorrowedQty, campus.name, campus.campusid "
                     + "FROM Equipment e LEFT JOIN Wishlist w ON w.eid = e.Eid INNER JOIN equipmentstock ON equipmentstock.eid = e.Eid INNER JOIN campus ON campusid = equipmentstock.cid ORDER BY campus.name ASC, eid ASC";
             pStmnt = cnnct.prepareStatement(query);
             //Statement s = cnnct.createStatement();
@@ -65,6 +70,58 @@ public class EquipmentDB {
                 eb.setTotalQty(rs.getInt(8));
                 eb.setBorrowQty(rs.getInt(9));
                 eb.setCampus(rs.getString(10));
+                eb.setCampusid(rs.getInt(11));
+                list.add(eb);
+            }
+            return list;
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (cnnct != null) {
+                try {
+                    cnnct.close();
+                } catch (SQLException sqlEx) {
+                }
+            }
+        }
+        return null;
+    }
+
+    public ArrayList filterEqByCampus(int cid) {
+        Connection cnnct = null;
+        PreparedStatement pStmnt = null;
+        try {
+            cnnct = getConnection();
+            String preQueryStatement = "SELECT e.Eid, e.EName, e.EStatus, equipmentstock.Stock, w.wid, e.imgsrc, "
+                    + "(SELECT COUNT(bid) FROM borrowrecord WHERE e.eid = borrowrecord.eid AND borrowrecord.status IN ('5') And cid = 1) AS damageQty, "
+                    + "equipmentstock.Quantity, "
+                    + "(SELECT COUNT(bid) FROM borrowrecord WHERE e.eid = borrowrecord.eid AND borrowrecord.status IN ('1', '2', '3')) AS BorrowedQty, campus.name, campus.campusid "
+                    + "FROM Equipment e LEFT JOIN Wishlist w ON w.eid = e.Eid INNER JOIN equipmentstock ON equipmentstock.eid = e.Eid INNER JOIN campus ON campusid = equipmentstock.cid WHERE campus.campusid = ? ORDER BY campus.name ASC, eid ASC";
+            pStmnt = cnnct.prepareStatement(preQueryStatement);
+            pStmnt.setInt(1, cid);
+
+            ResultSet rs = pStmnt.executeQuery();
+
+            ArrayList list = new ArrayList();
+
+            while (rs.next()) {
+                EquipmentBean eb = new EquipmentBean();
+                eb.setEid(rs.getInt(1));
+                eb.setEName(rs.getString(2));
+                eb.setEstatus(rs.getString(3));
+                eb.setQuantity(rs.getInt(4));
+                eb.setWid(rs.getInt(5));
+                eb.setImgsrc(rs.getString(6));
+                eb.setDamagedQty(rs.getInt(7));
+                eb.setTotalQty(rs.getInt(8));
+                eb.setBorrowQty(rs.getInt(9));
+                eb.setCampus(rs.getString(10));
+                eb.setCampusid(rs.getInt(11));
 
                 list.add(eb);
             }
@@ -137,7 +194,7 @@ public class EquipmentDB {
 //FROM Equipment
 //INNER JOIN borrowrecord ON Equipment.eid = borrowrecord.eid
 //GROUP BY Equipment.eid;
-    public ArrayList<EquipmentBean> queryEqByName(String name) {
+    public EquipmentBean queryEqByCampusAndEquipment(int cid, int eid) {
         Connection cnnct = null;
         PreparedStatement pStmnt = null;
         boolean isSuccess = false;
@@ -145,21 +202,32 @@ public class EquipmentDB {
 
         try {
             cnnct = getConnection();
-            String preStatement = "SELECT Eid, EName, EStatus, Quantity FROM Equipment WHERE EName LIKE ?";
+            String preStatement = "SELECT e.Eid, e.EName, e.EStatus, equipmentstock.Stock, w.wid, e.imgsrc, "
+                    + "(SELECT COUNT(bid) FROM borrowrecord WHERE e.eid = borrowrecord.eid AND borrowrecord.status IN ('5') And cid = 1) AS damageQty, "
+                    + "equipmentstock.Quantity, "
+                    + "(SELECT COUNT(bid) FROM borrowrecord WHERE e.eid = borrowrecord.eid AND borrowrecord.status IN ('1', '2', '3')) AS BorrowedQty, campus.name "
+                    + "FROM Equipment e LEFT JOIN Wishlist w ON w.eid = e.Eid INNER JOIN equipmentstock ON equipmentstock.eid = e.Eid INNER JOIN campus ON campusid = equipmentstock.cid WHERE e.eid = ? AND equipmentstock.cid = ? ORDER BY campus.name ASC, eid ASC";
             pStmnt = cnnct.prepareStatement(preStatement);
-            pStmnt.setString(1, "%" + name + "%");
+            pStmnt.setInt(1, eid);
+            pStmnt.setInt(2, cid);
             ResultSet rs = pStmnt.executeQuery();
+            EquipmentBean eb = new EquipmentBean();
+
             while (rs.next()) {
-                EquipmentBean eb = new EquipmentBean();
                 eb.setEid(rs.getInt(1));
                 eb.setEName(rs.getString(2));
                 eb.setEstatus(rs.getString(3));
                 eb.setQuantity(rs.getInt(4));
-                eList.add(eb);
+                eb.setWid(rs.getInt(5));
+                eb.setImgsrc(rs.getString(6));
+                eb.setDamagedQty(rs.getInt(7));
+                eb.setTotalQty(rs.getInt(8));
+                eb.setBorrowQty(rs.getInt(9));
+                eb.setCampus(rs.getString(10));
             }
             pStmnt.close();
             cnnct.close();
-            return eList;
+            return eb;
         } catch (SQLException ex) {
             while (ex != null) {
                 ex.printStackTrace();
@@ -168,7 +236,7 @@ public class EquipmentDB {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        return eList;
+        return null;
     }
 
     public boolean borrowEquipmentQty(int count, int eid) {

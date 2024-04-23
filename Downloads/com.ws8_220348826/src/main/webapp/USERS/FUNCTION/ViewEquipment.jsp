@@ -129,141 +129,108 @@
 
 
         </style>
+
     </head>
     <body>
         <jsp:include page="/WEB-INF/header.jsp"  />
 
 
-
-        <div class="wrapper d-flex align-items-stretch">
-            <nav id="sidebar">
-                <div class="custom-menu">
-                    <button type="button" id="sidebarCollapse" class="btn btn-primary">
-                        <i class="fa fa-bars"></i>
-                        <span class="sr-only">Toggle Menu</span>
-                    </button>
-                </div>
-                <div class="p-4">
-                    <h1><a href="index.html" class="logo">Hello, Username <span>Role, Campus</span></a></h1>
-                    <ul class="list-unstyled components mb-5">
-                        <li class="active">
-                            <a href="#"><span class="fa fa-eye mr-3"></span>View Equipment</a>
-                        </li>
-                        <li>
-                            <a href="#"><span class="fa fa-user mr-3"></span> About</a>
-                        </li>
-                        <li>
-                            <a href="#"><span class="fa fa-briefcase mr-3"></span> Works</a>
-                        </li>
-                        <li>
-                            <a href="#"><span class="fa fa-sticky-note mr-3"></span> Blog</a>
-                        </li>
-                        <li>
-                            <a href="#"><span class="fa fa-suitcase mr-3"></span> Gallery</a>
-                        </li>
-                        <li>
-                            <a href="#"><span class="fa fa-cogs mr-3"></span> Services</a>
-                        </li>
-                        <li>
-                            <a href="#"><span class="fa fa-paper-plane mr-3"></span> Contacts</a>
-                        </li>
-                    </ul>
-
-                    <div class="mb-5">
-                        <h3 class="h6 mb-3">Subscribe for newsletter</h3>
-                        <form action="#" class="subscribe-form">
-                            <div class="form-group d-flex">
-                                <div class="icon"><span class="icon-paper-plane"></span></div>
-                                <input type="text" class="form-control" placeholder="Enter Email Address">
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="footer">
-                        <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                            Copyright &copy;
-                            <script>document.write(new Date().getFullYear());</script> All rights reserved | This template
-                            is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com"
-                                                                                             target="_blank">Colorlib.com</a>
-                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        </p>
-                    </div>
-
-                </div>
-            </nav>
-
-            <!-- Page Content  -->
-            <div id="content" class="p-4 p-md-5 pt-5">
-
-                <%
-                    ArrayList<EquipmentBean> eqs = (ArrayList<EquipmentBean>) request.getAttribute("Equipments");
-                    if (session.getAttribute("equipments") == null) {
-                        session.setAttribute("equipments", new ArrayList<EquipmentBean>());
-                    }
-
-                    out.println("<h1>查看裝置狀態</h1>");
-
-                    out.println("<table border='1' >");
-                    out.println("<tr>");
-                    out.println("<th>ID</th><th>圖片</th><th>名字</th><th>狀態</th><th>數量</th><th>加入願望清單</th><th>加入預訂</th>");
-                    out.println("</tr>");
-                    for (int i = 0; i < eqs.size(); i++) {
-                        EquipmentBean c = eqs.get(i);
-                        out.println("<tr>");
-                        out.println("<td>" + c.getEid() + "</td>");
-                        out.println("<td><img width=108px height=80px src=\"img/" + c.getImgsrc() + "\"/></td>");
-                        out.println("<td>" + c.getEName() + "</td>");
-                        out.println("<td>" + c.getEstatus() + "</td>");
-                        out.println("<td>" + c.getQuantity() + "</td>");
-                        out.println("<td style=\"text-align: center; \"><a href=\"HandleWishlist?action=add&eid=" + c.getEid() + "&wid=" + c.getWid() + "\" >");
-                        if (c.getWid() != 0) {
-                            out.println("<img src=\"img/heart.png\" style=\"width: 20px; height: 20px; padding-top: 3px; \" />");
-
-                        } else {
-                            out.println("<img src=\"img/like.png\" style=\"width: 20px; height: 20px; alignContent: center; padding-top: 3px; \" />");
-
-                        }
-                        out.println("</a></td>");
-                        if (c.getQuantity() == 0) {
-                            out.println("<td>"
-                                    + "<input type=submit value=沽清 disabled />"
-                                    + "</td>");
-                        } else if (session.getAttribute("E" + c.getEid()) == null) {
-                            out.println("<td><form action=handleEdit method=get >"
-                                    + "<input type=hidden name=action value=addCart />"
-                                    + "<input type=hidden name=eid value=" + c.getEid() + " />"
-                                    + "<input type=submit value=預訂 />"
-                                    + "</form></td>");
-                        } else {
-                            out.println("<td><form action=handleEdit method=get >"
-                                    + "<input type=hidden name=action value=removeCart />"
-                                    + "<input type=hidden name=eid value=" + c.getEid() + " />"
-                                    + "<input type=submit value=取消選擇 />"
-                                    + "</form></td>");
-                        }
-
-                        out.println("</tr>");
-                    }
-                    out.println("</table>");
-
-                    out.println("<div class='button-container'>");  // 开始按钮容器
-                    out.println("<button class='btn-1' onclick='redirectToViewCart()'>查看預定列表</button>");  // 按钮
-                    out.println("</div>");  // 结束按钮容器
-                    out.println("<script>");
-                    out.println("function redirectToViewCart() {");
-                    out.println("    window.location.href = '" + request.getContextPath() + "/USERS/FUNCTION/ViewCart.jsp';");
-                    out.println("}");
-                    out.println("</script>");
-                    out.println("<a href=\"" + request.getContextPath() + "/USERS/User.jsp\">返回User</a>");  // 返回链接
-                %>
-            </div>
+        <%
+            ArrayList<EquipmentBean> eqs = (ArrayList<EquipmentBean>) request.getAttribute("Equipments");
+            if (session.getAttribute("equipments") == null) {
+                session.setAttribute("equipments", new ArrayList<EquipmentBean>());
+            }
+        %>
+        <h1>View Equipment</h1>
+        <div class='button-container'>
+            <button class='btn-1' onclick='redirectToViewCart()'>View Cart</button>
         </div>
 
-        <a href="USERS/FUNCTION/addRecord.jsp">Back to user</a>
-        <img src="img/like.png" style="width: 20px; height: 20px" />
-        <script src="USERS/FUNCTION/js/jquery.min.js"></script>
-        <script src="USERS/FUNCTION/js/popper.js"></script>
-        <script src="USERS/FUNCTION/js/bootstrap.min.js"></script>
-        <script src="USERS/FUNCTION/js/main.js"></script>
+        <form  action="<%=request.getContextPath()%>/HandleEquipment" method="get" >
+            <input type="hidden" name="action" value="filter" />
+
+            <span>Campus:</span>
+            <select name="campusOp" >
+                <option value="0">All</option>
+                <option value="1">Chai Wan</option>
+                <option value="2">Lee Wai Lee</option>
+                <option value="3">Sha Tin</option>
+                <option value="4">Tuen Mun</option>
+                <option value="5">Tsing Yi</option>
+
+            </select>
+            <input type="submit" />
+
+        </form>
+
+        <table border='1' >
+            <tr>
+                <th>ID</th><th>Image</th><th>Name</th><th>Campus</th><th>Status</th><th>Stock</th><th>Add to Wishlist</th><th>Add to Cart</th>
+            </tr>
+            <%
+                for (int i = 0; i < eqs.size(); i++) {
+                    EquipmentBean c = eqs.get(i);
+            %>
+            <tr>
+
+                <td><%=c.getEid()%></td>
+                <td><img width=108px height=80px src="img/<%=c.getImgsrc()%>"/></td>
+                <td><%=c.getEName()%></td>
+                <td><%=c.getCampus()%></td>
+                <td><%=c.getCampusid()%></td>
+                <td><%=c.getEstatus()%></td>
+                <td><%=c.getQuantity()%></td>
+                <td style="text-align: center; "><a href="HandleWishlist?action=add&eid=<%=c.getEid()%>&wid=<%=c.getWid()%>" >
+                        <% if (c.getWid() != 0) { %>
+                        <img src="img/heart.png" style="width: 20px; height: 20px; padding-top: 3px; " />
+
+                        <% } else { %>
+                        <img src="img/like.png" style="width: 20px; height: 20px; alignContent: center; padding-top: 3px; " />
+
+                        <%}%>
+                    </a></td>
+                    <% if (c.getQuantity() == 0) {
+                                out.println("<td>"
+                                        + "<input type=submit value=沽清 disabled />"
+                                        + "</td>");
+                            } else if (session.getAttribute("E" + c.getEid()) == null && session.getAttribute("C" + c.getCampusid()) == null) {
+                                out.println("<td><form action=handleEdit method=get >"
+                                        + "<input type=hidden name=action value=addCart />"
+                                        + "<input type=hidden name=eid value=" + c.getEid() + " />"
+                                        + "<input type=hidden name=cid value=" + c.getCampusid() + " />"
+                                        + "<input type=submit value=預訂 />"
+                                        + "</form></td>");
+                            } else if (session.getAttribute("E" + c.getEid()) != null && session.getAttribute("C" + c.getCampusid()) != null) {
+                                out.println("<td><form action=handleEdit method=get >"
+                                        + "<input type=hidden name=action value=removeCart />"
+                                        + "<input type=hidden name=eid value=" + c.getEid() + " />"
+                                        + "<input type=hidden name=cid value=" + c.getCampusid() + " />"
+                                        + "<input type=submit value=取消選擇 />"
+                                        + "</form></td>");
+                            } else {
+                                out.println("<td><form action=handleEdit method=get >"
+                                        + "<input type=hidden name=action value=addCart />"
+                                        + "<input type=hidden name=eid value=" + c.getEid() + " />"
+                                        + "<input type=hidden name=cid value=" + c.getCampusid() + " />"
+                                        + "<input type=submit value=預訂 />"
+                                        + "</form></td>");
+                            }
+
+                            out.println("</tr>");
+                        }
+                        out.println("</table>");
+                    %>
+
+            <script>
+                function redirectToViewCart() {
+                    window.location.href = '/com.ws8_220348826/HandleEquipment?action=cart';
+                }
+            </script>
+            <a href="<%=request.getContextPath()%>/USERS/User.jsp">返回User</a>
+
+
+            <jsp:include page="/WEB-INF/footer.jsp"  />
+
+
     </body>
 </html>

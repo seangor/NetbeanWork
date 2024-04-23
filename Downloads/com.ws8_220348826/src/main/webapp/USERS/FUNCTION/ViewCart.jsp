@@ -11,10 +11,9 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>View Cart</title>
     </head>
     <body>
-                       <jsp:include page="/WEB-INF/header.jsp"  />
 
         <h1>查看訂單</h1>
         <table border='1' >
@@ -81,5 +80,6 @@
             <input type="submit" value="confirm" disabled />
             <% }%>
         </form>
+
     </body>
 </html>

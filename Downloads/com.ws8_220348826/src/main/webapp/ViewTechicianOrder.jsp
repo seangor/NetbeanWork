@@ -47,5 +47,7 @@
             </tr>
             <% }%>
         </table>
+                <jsp:include page="/WEB-INF/footer.jsp"  />
+
     </body>
 </html>

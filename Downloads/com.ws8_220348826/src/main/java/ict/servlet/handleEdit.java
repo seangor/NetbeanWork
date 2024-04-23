@@ -123,15 +123,20 @@ public class handleEdit extends HttpServlet {
             }
         } else if ("addCart".equalsIgnoreCase(action)) {
             int eid = Integer.parseInt(request.getParameter("eid"));
+            int cid = Integer.parseInt(request.getParameter("cid"));
             HttpSession session = request.getSession(); // Get the session object
-            EquipmentBean eq = Eqdb.queryEqById(eid);
+            EquipmentBean eq = Eqdb.queryEqByCampusAndEquipment(cid, eid);
             ArrayList<EquipmentBean> eqs = (ArrayList<EquipmentBean>) session.getAttribute("equipments");
             session.setAttribute("E" + eid, eid);
+            session.setAttribute("C" + cid, cid);
+
             eqs.add(eq);
-            response.sendRedirect("" + request.getContextPath() + "/HandleEquipment?action=list");
+            response.sendRedirect("" + request.getContextPath() + "/HandleEquipment?action=filter&campusOp=" + cid + "");
 
         } else if ("removeCart".equalsIgnoreCase(action)) {
             int eid = Integer.parseInt(request.getParameter("eid"));
+            int cid = Integer.parseInt(request.getParameter("cid"));
+
             HttpSession session = request.getSession();
             ArrayList<EquipmentBean> eqs = (ArrayList<EquipmentBean>) session.getAttribute("equipments");
             EquipmentBean removedEquipment = null;
@@ -145,7 +150,9 @@ public class handleEdit extends HttpServlet {
                 eqs.remove(removedEquipment);
             }
             session.removeAttribute("E" + eid);
-            response.sendRedirect(request.getContextPath() + "/HandleEquipment?action=list");
+            session.removeAttribute("C" + cid);
+
+            response.sendRedirect("" + request.getContextPath() + "/HandleEquipment?action=filter&campusOp="+cid+"");
         } else if ("addOrder".equalsIgnoreCase(action)) {
             int eid = Integer.parseInt(request.getParameter("eid"));
             HttpSession session = request.getSession();
@@ -204,19 +211,18 @@ public class handleEdit extends HttpServlet {
                 RecordBean rb = db.queryBRecById(bid);
                 int eid = rb.getEid();
                 db.UpdateStatus("4", bid);
-                    EquipmentBean eq = Eqdb.queryEqById(eid);
-                    int Eqquantity = eq.getQuantity();
-                    int EqEid = eq.getEid();
-                    
-                    Eqdb.returnEquipmentQty(Eqquantity, EqEid);
-                    Eqdb.checkStatus(Eqquantity, EqEid);
+                EquipmentBean eq = Eqdb.queryEqById(eid);
+                int Eqquantity = eq.getQuantity();
+                int EqEid = eq.getEid();
+
+                Eqdb.returnEquipmentQty(Eqquantity, EqEid);
+                Eqdb.checkStatus(Eqquantity, EqEid);
             }
             RequestDispatcher rd;
             response.sendRedirect("" + request.getContextPath() + "/HandleBorrowRecord?action=checkReturn");
         } else if ("reportDamage".equalsIgnoreCase(action)) {
             int bid = Integer.parseInt(request.getParameter("bid"));
             db.UpdateStatus("5", bid);
-            RequestDispatcher rd;   
             response.sendRedirect("" + request.getContextPath() + "/HandleBorrowRecord?action=checkReturn");
         } else {
             PrintWriter out = response.getWriter();

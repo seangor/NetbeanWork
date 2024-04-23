@@ -7,7 +7,7 @@
 <%@page import="ict.bean.RequestBean"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
- <%@ taglib uri="/WEB-INF/tlds/showStatus" prefix="ict" %>
+<%@ taglib uri="/WEB-INF/tlds/showStatus" prefix="ict" %>
 
 <!DOCTYPE html>
 <html>
@@ -16,7 +16,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-                       <jsp:include page="/WEB-INF/header.jsp"  />
+        <jsp:include page="/WEB-INF/header.jsp"  />
 
         <%
             ArrayList<RequestBean> eqs = (ArrayList<RequestBean>) request.getAttribute("RequestList");
@@ -25,7 +25,7 @@
         <h1>View Request</h1>
         <table border='1' >
             <tr>
-                <th>ID</th><th>送貨日期</th><th>送貨時間</th><th>訂單創建日期</th><th>狀態</th><th>查看細節</th>
+                <th>ID</th><th>Delivey Date</th><th>Delivery Time</th><th>Created Date</th><th>Status</th><th>View Detail</th>
             </tr>
             <%                         for (int i = 0; i < eqs.size(); i++) {
                     RequestBean c = eqs.get(i);
@@ -47,8 +47,10 @@
                         <input type="submit" value="查看細節" style="background:none!important; border:none; padding:0!important; color:blue; text-decoration:underline; cursor:pointer;"></form></td>
             </tr>
             <% }%>
-            
+
 
         </table>    
+        <jsp:include page="/WEB-INF/footer.jsp"  />
+
     </body>
 </html>

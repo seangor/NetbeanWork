@@ -22,10 +22,10 @@
             ArrayList<OrderBean> eqs = (ArrayList<OrderBean>) request.getAttribute("OrderList");
 
         %> 
-        <h1>查看訂單</h1>
+        <h1>Your Delivery</h1>
         <table border='1' >
             <tr>
-                <th>ID</th><th>送貨日期</th><th>送貨時間</th><th>訂單創建日期</th><th>狀態</th><th>聯繫電話</th><th>查看細節</th>
+                <th>ID</th><th>Delivery Date</th><th>Delviery Time</th><th>Order Created Date</th><th>Status</th><th>Contact No</th><th>View Detail</th>
             </tr>
             <%                         for (int i = 0; i < eqs.size(); i++) {
                     OrderBean c = eqs.get(i);
@@ -47,5 +47,8 @@
                         <input type="submit" value="已送達" style="background:none!important; border:none; padding:0!important; color:blue; text-decoration:underline; cursor:pointer;" disabled></form></td>
 <%}
 }%>
-        </table>    </body>
+        </table>   
+    
+            <jsp:include page="/WEB-INF/footer.jsp"  />
+</body>
 </html>

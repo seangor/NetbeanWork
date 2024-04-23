@@ -61,15 +61,6 @@ public class HandleEquipment extends HttpServlet {
             RequestDispatcher rd;
             rd = getServletContext().getRequestDispatcher("/USERS/FUNCTION/ViewEquipment.jsp");
             rd.forward(request, response);
-        } else if ("search".equalsIgnoreCase(action)) {
-            String name = request.getParameter("equipments");
-            if (name != null) {
-                ArrayList<EquipmentBean> Eqs = Edb.queryEqByName(name);
-                request.setAttribute("Equipments", Eqs);
-                RequestDispatcher rd;
-                rd = getServletContext().getRequestDispatcher("/USERS/FUNCTION/ViewEquipment.jsp");
-                rd.forward(request, response);
-            }
         } else if ("cart".equalsIgnoreCase(action)) {
             RequestDispatcher rd;
             rd = getServletContext().getRequestDispatcher("/USERS/FUNCTION/ViewCart.jsp");
@@ -80,7 +71,24 @@ public class HandleEquipment extends HttpServlet {
             RequestDispatcher rd;
             rd = getServletContext().getRequestDispatcher("/TECHNICIAN/FUNCTION/CheckEqStatus.jsp");
             rd.forward(request, response);
-        }else {
+        } else if ("filter".equalsIgnoreCase(action)) {
+            String campus = request.getParameter("campusOp");
+            if (campus == null) {
+                campus = "0";
+            }
+            ArrayList<EquipmentBean> eqs = new ArrayList<EquipmentBean>();
+            if (campus.equalsIgnoreCase("0")) {
+                eqs = Edb.queryEq();
+            } else {
+                int cid = Integer.parseInt(campus);
+                eqs = Edb.filterEqByCampus(cid);
+            }
+            request.setAttribute("Equipments", eqs);
+            request.setAttribute("campusOp", campus);
+            RequestDispatcher rd;
+            rd = getServletContext().getRequestDispatcher("/USERS/FUNCTION/ViewEquipment.jsp");
+            rd.forward(request, response);
+        } else {
             PrintWriter out = response.getWriter();
             out.println("No such action!!!");
         }
@@ -88,3 +96,5 @@ public class HandleEquipment extends HttpServlet {
     }
 
 }
+
+//filterEqByCampus

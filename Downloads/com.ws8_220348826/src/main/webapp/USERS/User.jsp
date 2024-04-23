@@ -134,7 +134,6 @@
     </head>
 
     <body>
-                       <jsp:include page="/WEB-INF/header.jsp"  />
 
 
 
@@ -144,7 +143,7 @@
 
         <div class="cards-container">
 
-            <div class="card" onclick="window.location = '/com.ws8_220348826/HandleEquipment?action=list';">                
+            <div class="card" onclick="window.location = '/com.ws8_220348826/HandleEquipment?action=filter';">                
                 <span class="material-symbols-outlined">
                     construction
                 </span>
