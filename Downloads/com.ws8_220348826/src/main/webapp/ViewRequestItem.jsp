@@ -37,7 +37,7 @@
         <span>Status:         <ict:showStatus item="request" status="<%=BorrowRequest.getStatus()%>" /></span><br>
         <table border='1' >
             <tr>
-                <th>ID</th><th>eid</th>
+                <th>ID</th><th>Image</th><th>Equipment</th>
             </tr>
             <%                         for (int i = 0; i < eqs.size(); i++) {
                     RequestitemBean c = eqs.get(i);
@@ -66,5 +66,7 @@
         <% if (userType.equalsIgnoreCase("Technician")) {%>
         <jsp:include page="${request.getContextPath()}/WEB-INF/CheckEquipments.jsp"  />
         <%}%>
+                <jsp:include page="/WEB-INF/footer.jsp"  />
+
     </body>
 </html>

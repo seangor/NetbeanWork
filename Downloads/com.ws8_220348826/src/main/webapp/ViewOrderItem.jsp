@@ -34,7 +34,7 @@
         <span>User: Him</span><br>
         <table border='1' >
             <tr>
-                <th>ID</th><th>eid</th>
+                <th>ID</th><th>Image</th><th>Equipment</th>
             </tr>
             <%                         for (int i = 0; i < eqs.size(); i++) {
                     OrderitemBean c = eqs.get(i);
@@ -60,5 +60,7 @@
 
         <%}
                             }%>
+                                    <jsp:include page="/WEB-INF/footer.jsp"  />
+
     </body>
 </html>

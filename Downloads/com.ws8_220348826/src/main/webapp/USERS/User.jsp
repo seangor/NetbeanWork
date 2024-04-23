@@ -142,35 +142,6 @@
         <p class="section__subtitle">User</p>
 
 
-        <div class="cards-container">
-
-            <div class="card" onclick="window.location = '/com.ws8_220348826/HandleEquipment?action=list';">                
-                <span class="material-symbols-outlined">
-                    construction
-                </span>
-                <h3 class="card-title">View Equipment</h3>
-            </div>
-
-            <div class="card" onclick="window.location = '<%= request.getContextPath()%>/HandleOrder?action=list';">
-                <h3 class="card-title">View Order</h3>
-
-            </div>
-            <div class="card">
-                <h3 class="card-title"  onclick="window.location = '<%= request.getContextPath()%>/HandleBorrowRecord?action=Recordlist';" >View Borrow Record</h3>
-
-            </div>
-            <div class="card">
-                <h3 class="card-title">Title</h3>
-
-            </div>
-            <div class="card">
-                <span class="material-icons">
-                    sentiment_satisfied_alt
-                </span>
-                <h3 class="card-title">Title</h3>
-
-            </div>
-        </div>
     </body>
 
 </html>

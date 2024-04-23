@@ -81,5 +81,7 @@
             <input type="submit" value="confirm" disabled />
             <% }%>
         </form>
+                <jsp:include page="/WEB-INF/footer.jsp"  />
+
     </body>
 </html>

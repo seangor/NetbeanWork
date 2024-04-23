@@ -7,7 +7,7 @@
 <%@page import="ict.bean.OrderBean"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
- <%@ taglib uri="/WEB-INF/tlds/showStatus" prefix="ict" %>
+<%@ taglib uri="/WEB-INF/tlds/showStatus" prefix="ict" %>
 
 <!DOCTYPE html>
 <html>
@@ -16,7 +16,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-                       <jsp:include page="/WEB-INF/header.jsp"  />
+        <jsp:include page="/WEB-INF/header.jsp"  />
 
         <%
             ArrayList<OrderBean> eqs = (ArrayList<OrderBean>) request.getAttribute("OrderList");
@@ -25,7 +25,7 @@
         <h1>查看訂單</h1>
         <table border='1' >
             <tr>
-                <th>ID</th><th>送貨日期</th><th>送貨時間</th><th>訂單創建日期</th><th>狀態</th><th>聯繫電話</th><th>查看細節</th>
+                <th>ID</th><th>Delivey Date</th><th>Delivery Time</th><th>Created Date</th><th>Status</th><th>View Detail</th>
             </tr>
             <%                         for (int i = 0; i < eqs.size(); i++) {
                     OrderBean c = eqs.get(i);
@@ -49,5 +49,7 @@
             </tr>
             <% }%>
         </table>
+        <jsp:include page="/WEB-INF/footer.jsp"  />
+
     </body>
 </html>
