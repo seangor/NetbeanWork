@@ -42,11 +42,11 @@ public class EquipmentDB {
         PreparedStatement pStmnt = null;
         try {
             cnnct = getConnection();
-            String query = "SELECT e.Eid, e.EName, e.EStatus, e.Quantity, w.wid, e.imgsrc, (SELECT COUNT(bid) FROM borrowrecord WHERE e.eid = borrowrecord.eid AND borrowrecord.status IN ('5')) AS damageQty,"
-                    + " TotalQty, "
-                    + "(SELECT COUNT(bid) FROM borrowrecord WHERE e.eid = borrowrecord.eid AND borrowrecord.status IN ('1', '2', '3')) AS BorrowedQty "
-                    + "FROM Equipment e "
-                    + "LEFT JOIN Wishlist w ON w.eid = e.Eid";
+            String query = "SELECT e.Eid, e.EName, e.EStatus, equipmentstock.Stock, w.wid, e.imgsrc, "
+                    + "(SELECT COUNT(bid) FROM borrowrecord WHERE e.eid = borrowrecord.eid AND borrowrecord.status IN ('5') And cid = 1) AS damageQty, "
+                    + "equipmentstock.Quantity, "
+                    + "(SELECT COUNT(bid) FROM borrowrecord WHERE e.eid = borrowrecord.eid AND borrowrecord.status IN ('1', '2', '3')) AS BorrowedQty, campus.name "
+                    + "FROM Equipment e LEFT JOIN Wishlist w ON w.eid = e.Eid INNER JOIN equipmentstock ON equipmentstock.eid = e.Eid INNER JOIN campus ON campusid = equipmentstock.cid ORDER BY campus.name ASC, eid ASC";
             pStmnt = cnnct.prepareStatement(query);
             //Statement s = cnnct.createStatement();
             ResultSet rs = pStmnt.executeQuery();
@@ -64,6 +64,7 @@ public class EquipmentDB {
                 eb.setDamagedQty(rs.getInt(7));
                 eb.setTotalQty(rs.getInt(8));
                 eb.setBorrowQty(rs.getInt(9));
+                eb.setCampus(rs.getString(10));
 
                 list.add(eb);
             }
@@ -91,11 +92,11 @@ public class EquipmentDB {
         PreparedStatement pStmnt = null;
         try {
             cnnct = getConnection();
-String preQueryStatement = "SELECT Equipment.eid, EName, EStatus, Quantity, imgsrc, (SELECT COUNT(bid) FROM borrowrecord WHERE Equipment.eid = borrowrecord.eid AND borrowrecord.status IN ('1', '2', '3')) AS BorrowedQty, " +
-        " (SELECT COUNT(bid) FROM borrowrecord WHERE Equipment.eid = borrowrecord.eid AND borrowrecord.status IN ('5')) AS damageQty, " +
-        "TotalQty " +
-        "FROM Equipment " +
-        "WHERE Equipment.eid = ?";
+            String preQueryStatement = "SELECT Equipment.eid, EName, EStatus, Quantity, imgsrc, (SELECT COUNT(bid) FROM borrowrecord WHERE Equipment.eid = borrowrecord.eid AND borrowrecord.status IN ('1', '2', '3')) AS BorrowedQty, "
+                    + " (SELECT COUNT(bid) FROM borrowrecord WHERE Equipment.eid = borrowrecord.eid AND borrowrecord.status IN ('5')) AS damageQty, "
+                    + "TotalQty "
+                    + "FROM Equipment "
+                    + "WHERE Equipment.eid = ?";
             pStmnt = cnnct.prepareStatement(preQueryStatement);
             pStmnt.setInt(1, eid);
             ResultSet rs = pStmnt.executeQuery();
@@ -107,7 +108,6 @@ String preQueryStatement = "SELECT Equipment.eid, EName, EStatus, Quantity, imgs
                 eb.setEstatus(rs.getString(3));
                 eb.setQuantity(rs.getInt(4));
                 eb.setImgsrc(rs.getString(5));
-
 
                 eb.setBorrowQty(rs.getInt(6));
                 eb.setDamagedQty(rs.getInt(7));

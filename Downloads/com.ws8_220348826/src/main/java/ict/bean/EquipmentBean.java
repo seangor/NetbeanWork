@@ -20,6 +20,15 @@ public class EquipmentBean implements Serializable{
     private int damagedQty;
     private int totalQty;
     private int borrowQty;
+    private String campus;
+
+    public String getCampus() {
+        return campus;
+    }
+
+    public void setCampus(String campus) {
+        this.campus = campus;
+    }
 
     public int getBorrowQty() {
         return borrowQty;
