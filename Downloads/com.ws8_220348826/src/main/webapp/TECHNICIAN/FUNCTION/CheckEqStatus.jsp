@@ -14,7 +14,7 @@
     <body>
                                       <jsp:include page="/WEB-INF/header.jsp"  />
 
-        <h1>View Equipment Status</h1>
+        
                <jsp:include page="${request.getContextPath()}/WEB-INF/CheckEquipments.jsp"  />
 
         

@@ -2,6 +2,11 @@ package ict.db;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import ict.bean.UserBean;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 public class UserDB {
 
@@ -107,7 +112,7 @@ public class UserDB {
         try (Connection cnnct = getConnection(); PreparedStatement stmnt = cnnct.prepareStatement(preQueryStatement)) {
             stmnt.setString(1, id);
             stmnt.setString(2, user);
-            stmnt.setString(3, pwd);
+            stmnt.setString(3, hashPassword(pwd)); // 使用哈希密码
             int rowCount = stmnt.executeUpdate();
             if (rowCount > 0) {
                 System.out.println(user + " has been added");
@@ -117,6 +122,35 @@ public class UserDB {
             ex.printStackTrace();
         }
         return false;
+    }
+
+    private String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(password.getBytes());
+            return Base64.getEncoder().encodeToString(hash);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Failed to hash password", e);
+        }
+    }
+
+    public ArrayList<UserBean> getAllUsers() {
+        ArrayList<UserBean> list = new ArrayList<>();
+        String query = "SELECT * FROM user";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                UserBean user = new UserBean();
+                user.setUid(rs.getString("Uid"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setIdentity(rs.getString("identity"));
+                user.setTel(rs.getString("tel"));
+                list.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     public String getUserIdentity(String user, String pwd) {
@@ -148,5 +182,9 @@ public class UserDB {
             }
         }
         return identity;
+    }
+
+    public boolean addUserInfo(String id, String username, String password, String phoneNumber, String identity) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

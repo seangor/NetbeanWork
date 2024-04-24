@@ -147,47 +147,32 @@
                     <h1><a href="index.html" class="logo">Hello, Username <span>Role, Campus</span></a></h1>
                     <ul class="list-unstyled components mb-5">
                         <li class="active">
-                            <a href="#"><span class="fa fa-eye mr-3"></span>View Equipment</a>
+                            <a href="<%= request.getContextPath()%>/HandleEquipment?action=list"><span class="fa fa-eye mr-3"></span>View Equipment</a>
                         </li>
                         <li>
-                            <a href="#"><span class="fa fa-user mr-3"></span> About</a>
+                            <a href="<%= request.getContextPath()%>/HandleRequest?action=list"><span class="fa fa-eye mr-3"></span>View Request</a>
                         </li>
                         <li>
-                            <a href="#"><span class="fa fa-briefcase mr-3"></span> Works</a>
+                            <a href="<%= request.getContextPath()%>/HandleOrder?action=list">
+                                <span class="fa fa-eye mr-3"></span>View Order
+                            </a>
                         </li>
                         <li>
-                            <a href="#"><span class="fa fa-sticky-note mr-3"></span> Blog</a>
+                            <a href="<%= request.getContextPath()%>/HandleBorrowRecord?action=Recordlist"><span class="fa fa-eye mr-3"></span>View Record</a>
                         </li>
                         <li>
-                            <a href="#"><span class="fa fa-suitcase mr-3"></span> Gallery</a>
+                            <a href="#"><span class="fa fa-eye mr-3"></span>View personal Info & update password/Info</a>
                         </li>
                         <li>
-                            <a href="#"><span class="fa fa-cogs mr-3"></span> Services</a>
+                            <a href="#"><span class="fa fa-bell mr-3"></span>Notification</a>
                         </li>
                         <li>
-                            <a href="#"><span class="fa fa-paper-plane mr-3"></span> Contacts</a>
+                            <a href="./USERS/User.jsp"><span class="fa fa-undo mr-3"></span>Back</a>
                         </li>
                     </ul>
 
-                    <div class="mb-5">
-                        <h3 class="h6 mb-3">Subscribe for newsletter</h3>
-                        <form action="#" class="subscribe-form">
-                            <div class="form-group d-flex">
-                                <div class="icon"><span class="icon-paper-plane"></span></div>
-                                <input type="text" class="form-control" placeholder="Enter Email Address">
-                            </div>
-                        </form>
-                    </div>
 
-                    <div class="footer">
-                        <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                            Copyright &copy;
-                            <script>document.write(new Date().getFullYear());</script> All rights reserved | This template
-                            is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com"
-                                                                                             target="_blank">Colorlib.com</a>
-                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        </p>
-                    </div>
+
 
                 </div>
             </nav>
@@ -254,13 +239,12 @@
                     out.println("    window.location.href = '" + request.getContextPath() + "/USERS/FUNCTION/ViewCart.jsp';");
                     out.println("}");
                     out.println("</script>");
-                    out.println("<a href=\"" + request.getContextPath() + "/USERS/User.jsp\">返回User</a>");  // 返回链接
+
                 %>
             </div>
         </div>
 
-        <a href="USERS/FUNCTION/addRecord.jsp">Back to user</a>
-        <img src="img/like.png" style="width: 20px; height: 20px" />
+        
         <script src="USERS/FUNCTION/js/jquery.min.js"></script>
         <script src="USERS/FUNCTION/js/popper.js"></script>
         <script src="USERS/FUNCTION/js/bootstrap.min.js"></script>
