@@ -139,6 +139,7 @@
             if (session.getAttribute("equipments") == null) {
                 session.setAttribute("equipments", new ArrayList<EquipmentBean>());
             }
+            String campusOp =request.getParameter("campusOp");
         %>
         <h1>View Equipment</h1>
         <div class='button-container'>
@@ -151,11 +152,11 @@
             <span>Campus:</span>
             <select name="campusOp" >
                 <option value="0">All</option>
-                <option value="1">Chai Wan</option>
-                <option value="2">Lee Wai Lee</option>
-                <option value="3">Sha Tin</option>
-                <option value="4">Tuen Mun</option>
-                <option value="5">Tsing Yi</option>
+                <option value="1" <%if (campusOp.equalsIgnoreCase("1")){%> selected <%}%>  >Chai Wan</option>
+                <option value="2" <%if (campusOp.equalsIgnoreCase("2")){%> selected <%}%> >Lee Wai Lee</option>
+                <option value="3" <%if (campusOp.equalsIgnoreCase("3")){%> selected <%}%> >Sha Tin</option>
+                <option value="4" <%if (campusOp.equalsIgnoreCase("4")){%> selected <%}%> >Tuen Mun</option>
+                <option value="5" <%if (campusOp.equalsIgnoreCase("5")){%> selected <%}%> >Tsing Yi</option>
 
             </select>
             <input type="submit" />
@@ -176,7 +177,6 @@
                 <td><img width=108px height=80px src="img/<%=c.getImgsrc()%>"/></td>
                 <td><%=c.getEName()%></td>
                 <td><%=c.getCampus()%></td>
-                <td><%=c.getCampusid()%></td>
                 <td><%=c.getEstatus()%></td>
                 <td><%=c.getQuantity()%></td>
                 <td style="text-align: center; "><a href="HandleWishlist?action=add&eid=<%=c.getEid()%>&wid=<%=c.getWid()%>" >
